@@ -1,30 +1,27 @@
-'use strict';
+const gulp = require('gulp');
+const sass = require('gulp-sass')(require('sass'));
+const uglify = require('gulp-uglify');
+const rename = require('gulp-rename');
+const babel = require('gulp-babel');
 
-var gulp = require('gulp');
-var sass = require('gulp-sass')(require('sass'));
-var uglify = require('gulp-uglify');
-var rename = require('gulp-rename');
-
-// compile scss to css
+// Compile SCSS to CSS
 gulp.task('sass', function () {
     return gulp.src('./sass/styles.scss')
-        .pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
-        .pipe(rename({basename: 'styles.min'}))
+        .pipe(sass({ outputStyle: 'compressed' }).on('error', sass.logError))
+        .pipe(rename({ basename: 'styles.min' }))
         .pipe(gulp.dest('./css'));
 });
 
-// watch changes in scss files and run sass task
-gulp.task('sass:watch', function () {
-    gulp.watch('./sass/**/*.scss', ['sass']);
-});
-
-// minify js
+// Transpile and Minify JS
 gulp.task('minify-js', function () {
     return gulp.src('./js/scripts.js')
+        .pipe(babel({
+            presets: ['@babel/preset-env']
+        }))
         .pipe(uglify())
-        .pipe(rename({basename: 'scripts.min'}))
+        .pipe(rename({ basename: 'scripts.min' }))
         .pipe(gulp.dest('./js'));
 });
 
-// default task
+// Default task
 gulp.task('default', gulp.series('sass', 'minify-js'));
