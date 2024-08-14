@@ -441,8 +441,8 @@ var MD5 = function (string) {
 //Pix stuff
 function generateQrCode(giftName, giftPrice, txid, giftername) {
     const pixKey = data.pix;
-    const pixName = data.beneficiariopix; 
-    const pixCity = sanitizeCityName(data.cidadepix);
+    const pixName = sanitizeName(data.beneficiariopix); 
+    const pixCity = sanitizeName(data.cidadepix);
     const value = parseFloat(giftPrice);
     console.log("value: ", value);
     // Initialize Pix instance

@@ -365,11 +365,7 @@
     };
 
     function checkPassword() {
-       
-        // created hashing the form pass
-        // var hash = CryptoJS.SHA256("[pass]").toString();
-        // console.log(hash);
-        
+
         // Hash the input password
         var password = prompt("Insira a senha:");
         var inputHash = CryptoJS.SHA256(password).toString();
@@ -390,7 +386,7 @@
         return txid;
     }
 
-    function sanitizeCityName(city) {
+    function sanitizeName(city) {
         // Remover acentos e caracteres especiais
         city = city.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
         // Converter para maiúsculas
