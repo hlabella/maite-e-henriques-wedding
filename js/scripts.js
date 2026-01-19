@@ -188,7 +188,7 @@ $(document).ready(function () {
         e.preventDefault();
         var data = $(this).serialize();
 
-        $('#alert-wrapper').html(alert_markup('info', '<strong>Just a sec!</strong> We are saving your details.'));
+        $('#alert-wrapper').html(alert_markup('info', '<strong>Só um segundo!</strong> Estamos salvando seus dados.'));
 
         $.post('https://script.google.com/macros/s/AKfycbxKuS2yVf2ndryQrVTxX5H6k1tpeGQCT-oPooXGewOTCLS_7W35ybTV3-7cguvcAcYyZw/exec', data)
             .done(function (data) {
@@ -198,11 +198,12 @@ $(document).ready(function () {
                 } else {
                     $('#alert-wrapper').html('');
                     $('#rsvp-modal').modal('show');
+                    $('#rsvp-form').hide();
                 }
             })
             .fail(function (data) {
                 console.log(data);
-                $('#alert-wrapper').html(alert_markup('danger', '<strong>Sorry!</strong> There is some issue with the server. '));
+                $('#alert-wrapper').html(alert_markup('danger', '<strong>Desculpe!</strong> Estamos com algum problema no servidor. Avise os noivos.'));
             });
     });
 
@@ -288,6 +289,38 @@ $(document).ready(function () {
                 if (document.getElementById("countdown")) document.getElementById("countdown").innerHTML = "<h3>É hoje!</h3>";
             }
         }, 1000);
+    }
+
+    /***************** Background Music ******************/
+    var audio = document.getElementById("wedding-music");
+    audio.volume = 0.5; // Set volume to 50%
+
+    // Attempt to play immediately
+    var playPromise = audio.play();
+
+    if (playPromise !== undefined) {
+        playPromise.then(_ => {
+            // Automatic playback started!
+            console.log("Audio playing automatically");
+        })
+            .catch(error => {
+                // Auto-play was prevented
+                console.log("Audio autoplay prevented. Waiting for user interaction.");
+
+                // Add a one-time event listener to play on first interaction
+                var playOnInteraction = function () {
+                    audio.play();
+                    document.removeEventListener('click', playOnInteraction);
+                    document.removeEventListener('touchstart', playOnInteraction);
+                    document.removeEventListener('keydown', playOnInteraction);
+                    document.removeEventListener('scroll', playOnInteraction);
+                };
+
+                document.addEventListener('click', playOnInteraction);
+                document.addEventListener('touchstart', playOnInteraction);
+                document.addEventListener('keydown', playOnInteraction);
+                document.addEventListener('scroll', playOnInteraction);
+            });
     }
 
 });

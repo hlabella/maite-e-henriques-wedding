@@ -60,6 +60,21 @@
             color: #ffffff;
             /* Adjust color as needed */
         }
+
+        #story-carousel {
+            margin-top: 30px;
+        }
+
+        #story-carousel .slides li img {
+            height: 500px;
+            object-fit: cover;
+            width: 100%;
+        }
+
+        #events {
+            background: url('img/gardennoor.png') no-repeat center center;
+            background-size: cover;
+        }
     </style>
     <script src="js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js"></script>
@@ -69,9 +84,7 @@
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 </head>
 
-<!-- <body onload="checkPassword()" id="top"> -->
-
-<body id="top">
+<body onload="checkPassword()" id="top">
     <section class="hero">
         <section class="navigation">
             <header>
@@ -88,8 +101,6 @@
                             </ul>
                             <ul class="member-actions">
                                 <li><a href="#rsvp" class="btn-white btn-small">RSVP</a></li>
-                                <li><a href="#" id="whatsapp-link" class="btn-white btn-small" target="_blank"><i
-                                            class="fa fa-whatsapp"></i> Msg</a></li>
                             </ul>
                         </nav>
                     </div>
@@ -165,30 +176,56 @@
                     </p>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-md-8 col-md-offset-2">
+                    <div class="flexslider" id="story-carousel" style="margin-bottom: 80px;">
+                        <ul class="slides">
+                            <li><img src="img/carousel/image0.jpeg" alt="Story Image 0"></li>
+                            <li><img src="img/carousel/image1.jpeg" alt="Story Image 1"></li>
+                            <li><img src="img/carousel/image2.jpeg" alt="Story Image 2"></li>
+                            <li><img src="img/carousel/image3.jpeg" alt="Story Image 3"></li>
+                            <li><img src="img/carousel/image4.jpeg" alt="Story Image 4"></li>
+                            <li><img src="img/carousel/image6.jpeg" alt="Story Image 6"></li>
+                            <li><img src="img/carousel/image7.jpeg" alt="Story Image 7"></li>
+                            <li><img src="img/carousel/image8.jpeg" alt="Story Image 8"></li>
+                            <li><img src="img/carousel/image9.jpeg" alt="Story Image 9"></li>
+                            <li><img src="img/carousel/image10.jpeg" alt="Story Image 10"></li>
+                            <li><img src="img/carousel/image11.jpeg" alt="Story Image 11"></li>
+                            <li><img src="img/carousel/image12.jpeg" alt="Story Image 12"></li>
+                            <li><img src="img/carousel/image13.jpeg" alt="Story Image 13"></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
-    <section class="events section-padding" id="events">
+    <section class="events" id="events" style="padding: 150px 0;">
         <div class="container">
             <div class="row">
-                <div class="col-md-12">
-                    <h3 class="header" style="text-align: center;">Local</h3>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12 col-sm-12 col-xs-12 centercol text-center">
-                    <div class="wp3">
-                        <h5>Cerimônia e Recepção</h5>
-                        <p id="place1name"></p>
-                        <p id="place1address"></p>
-                        <p>Horário: <span id="place1time"></span></p>
-                        <div id="map"
-                            style="height: 400px; width: 100%; margin-top: 20px; border-radius: 8px; border: 2px solid #2596be;">
+                <div class="col-md-8 col-md-offset-2">
+                    <div class="events-overlay"
+                        style="background: rgba(255, 255, 255, 0.8); padding: 60px 40px; border-radius: 8px; box-shadow: 0 15px 35px rgba(0,0,0,0.1);">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h3 class="header" style="text-align: center; margin-top: 0; margin-bottom: 30px;">Local
+                                </h3>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 col-xs-12 centercol text-center">
+                                <div class="wp3">
+                                    <h5 style="margin-bottom: 20px; font-weight: bold;">Cerimônia e Recepção</h5>
+                                    <p id="place1name" style="font-size: 1.2em; margin-bottom: 10px;"></p>
+                                    <p id="place1address" style="margin-bottom: 10px; color: #666;"></p>
+                                    <p style="font-size: 1.1em; font-weight: 500;">Horário: <span
+                                            id="place1time"></span></p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
     </section>
 
@@ -290,7 +327,7 @@
         <div class="container">
             <div class="row" style="margin-top: 40px;">
                 <div class="col-md-6 col-md-offset-3">
-                    <h3>Répondez s'il vous plaît</h3>
+                    <h3>Confirme sua presença</h3>
                     <p>Apreciaremos se puder nos avisar sobre sua presença até a data: <span id="rspvlimitdate"></span>
                     </p>
                     <form id="rsvp-form" class="rsvp-form" action="" method="POST">
@@ -468,21 +505,6 @@
     <script src="js/Pix.js"></script>
     <!-- Use unminified scripts.js for latest changes -->
     <script src="js/scripts.js"></script>
-
-    <script>
-        const isMobile = /android|iphone|ipad|mobile/i.test(navigator.userAgent);
-        const whatsappNumber = "5511942152384";
-        const whatsappMessage = "Olá! Gostaria de um site para meu casamento.";
-
-        const whatsappLink = isMobile
-            ? `whatsapp://send?phone=${whatsappNumber}&text=${encodeURIComponent(whatsappMessage)}`
-            : `https://api.whatsapp.com/send?phone=${whatsappNumber}&text=${encodeURIComponent(whatsappMessage)}`;
-
-        const whatsappEl = document.getElementById('whatsapp-link');
-        if (whatsappEl) {
-            whatsappEl.href = whatsappLink;
-        }
-    </script>
 
     <script>
         const data = {
@@ -677,7 +699,7 @@
                 const place1AddressElement = document.getElementById('place1address');
                 const address1 = data.place1address;
                 const mapsUrl1 = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
-                place1AddressElement.innerHTML = `<a href="${mapsUrl}" target="_blank">${address}</a>`;
+                place1AddressElement.innerHTML = `<a href="${mapsUrl}" style="color: #00008B;" target="_blank"><i class="fa fa-map-marker" style="margin-right: 5px;"></i>${address}</a>`;
 
 
             } else if (data.places === 2) {
@@ -688,7 +710,7 @@
                 const place1AddressElement = document.getElementById('place1address');
                 const address1 = data.place1address;
                 const mapsUrl1 = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address1)}`;
-                place1AddressElement.innerHTML = `<a href="${mapsUrl1}" target="_blank">${address1}</a>`;
+                place1AddressElement.innerHTML = `<a href="${mapsUrl1}" style="color: #00008B;" target="_blank"><i class="fa fa-map-marker" style="margin-right: 5px;"></i>${address1}</a>`;
 
             }
             document.getElementById('weddingnames').textContent = data.weddingnames;
@@ -706,6 +728,9 @@
     </script>
 
 
+    <audio id="wedding-music" loop>
+        <source src="img/song.mp3" type="audio/mpeg">
+    </audio>
 </body>
 
 </html>
