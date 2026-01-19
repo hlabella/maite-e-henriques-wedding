@@ -34,11 +34,13 @@
 
         // load js files from CDN if local node_modules fail
         function loadJsFromCDN(js) {
+            var script = document.createElement('script');
             if (js === 'waypoints.js') {
-                document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/jquery.waypoints.js"><\/script>');
+                script.src = 'https://cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/jquery.waypoints.min.js';
             } else if (js === 'jquery.js') {
-                document.write('<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"><\/script>');
+                script.src = 'https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js';
             }
+            document.body.appendChild(script);
         }
     </script>
 
@@ -48,9 +50,8 @@
     <link rel="stylesheet" href="css/flexslider.css">
     <link rel="stylesheet" href="css/styles.min.css">
     <link rel="stylesheet" href="css/queries.css">
-    <link rel="stylesheet" href="node_modules/animate.css/animate.min.css" onerror="loadCssFromCDN('animate.css')">
-    <link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.min.css"
-        onerror="loadCssFromCDN('font-awesome.css')">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
     <style>
         .wedding-font {
@@ -87,6 +88,8 @@
                             </ul>
                             <ul class="member-actions">
                                 <li><a href="#rsvp" class="btn-white btn-small">RSVP</a></li>
+                                <li><a href="#" id="whatsapp-link" class="btn-white btn-small" target="_blank"><i
+                                            class="fa fa-whatsapp"></i> Msg</a></li>
                             </ul>
                         </nav>
                     </div>
@@ -455,7 +458,8 @@
 
 
     <script src="js/vendor/jquery-1.11.2.min.js" onerror="loadJsFromCDN('jquery.js')"></script>
-    <script src="node_modules/waypoints/lib/jquery.waypoints.min.js" onerror="loadJsFromCDN('waypoints.js')"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/jquery.waypoints.min.js"
+        onerror="loadJsFromCDN('waypoints.js')"></script>
     <script src="js/jquery.fancybox.pack.js"></script>
     <script src="js/vendor/bootstrap.min.js"></script>
     <script src="js/jquery.flexslider-min.js"></script>
@@ -474,7 +478,10 @@
             ? `whatsapp://send?phone=${whatsappNumber}&text=${encodeURIComponent(whatsappMessage)}`
             : `https://api.whatsapp.com/send?phone=${whatsappNumber}&text=${encodeURIComponent(whatsappMessage)}`;
 
-        document.getElementById('whatsapp-link').href = whatsappLink;
+        const whatsappEl = document.getElementById('whatsapp-link');
+        if (whatsappEl) {
+            whatsappEl.href = whatsappLink;
+        }
     </script>
 
     <script>
@@ -493,7 +500,7 @@
             "place1address": "Rodovia Padre Mariano Aparício de La Mata, 300, Estância Bela Vista, São José do Rio Preto 15077-456",
             "presentes": 13,
             "gifts": [
-                { "name": "Utensílios de Cozinha", "price": 60, "image": "https://pixnio.com/free-images/2020/12/19/2020-12-19-13-33-59-1152x768.jpg" },
+                { "name": "Utensílios de Cozinha", "price": 60, "image": "https://cdn-assets-legacy.casar.com/thumb/208x208x1/img/presentes/shopping-camicado/Faqueiro_Berna_30_Pecas.jpg" },
                 { "name": "Jogo Americano", "price": 80, "image": "https://victorianprint.co.uk/wp-content/uploads/2022/03/VPCS_EM_0027-scaled.jpg" },
                 { "name": "Jogo de Toalhas", "price": 100, "image": "https://i2.pickpik.com/photos/618/236/40/towels-linens-store-bath-linen-preview.jpg" },
                 { "name": "Cafeteira", "price": 110, "image": "https://upload.wikimedia.org/wikipedia/commons/6/60/Italian-coffee-maker.svg" },
