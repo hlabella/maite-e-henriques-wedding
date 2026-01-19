@@ -1,8 +1,9 @@
 <!doctype html>
 <html class="no-js" lang="pt-BR">
+
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <title>RSVP | Casamento</title>
     <meta name="description" content="Gostariamos te convidar para o grande dia!">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -14,7 +15,6 @@
     <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
     <link rel="manifest" href="manifest.json">
-    <link rel="mask-icon" href="safari-pinned-tab.svg" color="#5bbad5">
 
     <script>
         // load css files from CDN if local node_modules fail
@@ -49,376 +49,526 @@
     <link rel="stylesheet" href="css/styles.min.css">
     <link rel="stylesheet" href="css/queries.css">
     <link rel="stylesheet" href="node_modules/animate.css/animate.min.css" onerror="loadCssFromCDN('animate.css')">
-    <link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.min.css" onerror="loadCssFromCDN('font-awesome.css')">
+    <link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.min.css"
+        onerror="loadCssFromCDN('font-awesome.css')">
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
     <style>
         .wedding-font {
-            font-family: 'Great Vibes', cursive;
+            font-family: 'Pinyon Script', cursive;
             font-size: 81px;
-            color: #ffffff; /* Adjust color as needed */
+            color: #ffffff;
+            /* Adjust color as needed */
         }
     </style>
     <script src="js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 </head>
-<body onload="checkPassword()" id="top">
-<section class="hero">
-    <section class="navigation">
-        <header>
-            <div class="header-content">
-                <div class="logo"><a href="#"><img src="img/logo.png" alt="Logo"></a></div>
-                <div class="header-nav">
-                    <nav>
-                        <ul class="primary-nav">
-                            <li><a href="#intro">Nossa História</a></li>
-                            <li><a href="#events">Local</a></li>
-                            <li><a href="#eng-pics">Trajes</a></li>
-                            <li><a href="#gifts">Presentes</a></li>
-                        </ul>
-                        <ul class="member-actions">
-                            <li><a href="#rsvp" class="btn-white btn-small">RSVP</a></li>
-                        </ul>
-                    </nav>
+
+<!-- <body onload="checkPassword()" id="top"> -->
+
+<body id="top">
+    <section class="hero">
+        <section class="navigation">
+            <header>
+                <div class="header-content">
+                    <div class="header-nav">
+                        <nav>
+                            <ul class="primary-nav">
+                                <li><a href="#date">Data</a></li>
+                                <li><a href="#story">História</a></li>
+                                <li><a href="#events">Local</a></li>
+                                <li><a href="#tips">Dicas</a></li>
+                                <li><a href="#eng-pics">Traje</a></li>
+                                <li><a href="#gifts">Presentes</a></li>
+                            </ul>
+                            <ul class="member-actions">
+                                <li><a href="#rsvp" class="btn-white btn-small">RSVP</a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                    <div class="navicon">
+                        <a class="nav-toggle" href="#"><span></span></a>
+                    </div>
                 </div>
-                <div class="navicon">
-                    <a class="nav-toggle" href="#"><span></span></a>
+            </header>
+        </section>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-10 col-md-offset-1">
+                    <div class="hero-content text-center" id="dynamic-hero-content">
+                        <h1 id="weddingnames" class="wedding-font"></h1>
+                    </div>
                 </div>
             </div>
-        </header>
+            <div class="row">
+                <!-- Button is absolutely positioned now -->
+                <a href="#rsvp" class="btn btn-fill btn-large rsvp-btn">RSVP</a>
+            </div>
+        </div>
     </section>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-10 col-md-offset-1">
-                <div class="hero-content text-center" id="dynamic-hero-content">
-                    <h1 id="weddingnames" class="wedding-font"></h1>
+
+    <section id="date" class="section-padding">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <h3>Save the date!</h3>
+                    <p id="weddingdate"></p>
+                    <div id="countdown" class="row" style="margin-top: 30px;">
+                        <div class="col-md-3 col-xs-6">
+                            <div class="countdown-box"><span id="days">00</span>
+                                <p>Dias</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-xs-6">
+                            <div class="countdown-box"><span id="hours">00</span>
+                                <p>Horas</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-xs-6">
+                            <div class="countdown-box"><span id="minutes">00</span>
+                                <p>Minutos</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-xs-6">
+                            <div class="countdown-box"><span id="seconds">00</span>
+                                <p>Segundos</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-sm-4 hidden-xs"></div>
-            <div class="col-sm-4 hidden-xs text-center"><a href="#rsvp"
-                                                           class="btn btn-accent btn-large rsvp-btn">RSVP</a></div>
-            <div class="col-sm-4 hidden-xs"></div>
-        </div>
-    </div>
-    <div class="down-arrow floating-arrow"><a href="#invitation"><i class="fa fa-angle-down"></i></a></div>
-</section>
+    </section>
 
-<section id="invitation" class="section-padding">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12 text-center">
-                <h3>Vamos casar!</h3>
-                <p id="weddingdate"></p>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section id="intro">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12 text-center">
-                <h3 class="header">Como nos conhecemos?</h3>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-3 hidden-sm hidden-xs"></div>
-            <div class="col-md-6">
-                <p id="story"></p>
-            </div>
-            <div class="col-md-3 hidden-sm hidden-xs"></div>
-        </div>
-    </div>
-</section>
-
-<section class="events section-padding" id="events">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <h3 class="header" style="text-align: center;">Local</h3>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6 col-sm-12 col-xs-12 leftcol">
-                <div class="wp3">
-                    <h5>Cerimônia <span id="place1time"></span></h5>
-                    <p id="place1name"></p>
-                    <p id="place1address"></p>
+    <section id="story" class="section-padding">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <h3 class="header">Nossa História</h3>
                 </div>
             </div>
-            <div class="col-md-6 col-sm-12 col-xs-12 rightcol">
-                <div class="wp4 animated fadeInRight">
-                    <h5>Festa <span id="place2time"></span></h5>
-                    <p id="place2name"></p>
-                    <p id="place2address"></p>
+            <div class="row">
+                <div class="col-md-8 col-md-offset-2 text-center">
+                    <p class="lead">
+                        Tudo começou quando Ellen, na época namorada do irmão de Henrique, decidiu bancar o cupido. Ela
+                        apresentou sua grande amiga para o cunhado. Até então, não imaginavam que estavam prestes a
+                        encontrar o amor de suas vidas. O que começou como uma simples apresentação transformou-se em
+                        dates e,
+                        eventualmente, floresceu no amor que celebramos hoje.
+                    </p>
                 </div>
             </div>
         </div>
-        
-    </div>
-</section>
+    </section>
+
+    <section class="events section-padding" id="events">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h3 class="header" style="text-align: center;">Local</h3>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12 centercol text-center">
+                    <div class="wp3">
+                        <h5>Cerimônia e Recepção</h5>
+                        <p id="place1name"></p>
+                        <p id="place1address"></p>
+                        <p>Horário: <span id="place1time"></span></p>
+                        <div id="map"
+                            style="height: 400px; width: 100%; margin-top: 20px; border-radius: 8px; border: 2px solid #2596be;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
 
 
-<section id="eng-pics" class="section-padding">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-12 text-center">
-                <h3 class="header">Trajes</h3>
+
+    <section id="tips" class="section-padding" style="background-color: #f8f9fa;">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <h3 class="header">Dicas</h3>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 text-center">
+                    <div class="service-box">
+                        <i class="fa fa-plane fa-3x" style="color: #c9965e; margin-bottom: 15px;"></i>
+                        <h4>Formas de Chegar</h4>
+                        <p>São José do Rio Preto conta com o Aeroporto Estadual Professor Eribelto Manoel Reino (SJP),
+                            que recebe voos das principais companhias aéreas. Para quem vem de carro, o acesso principal
+                            é pela Rodovia Washington Luís (SP-310), uma das melhores do país.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 text-center">
+                    <div class="service-box">
+                        <i class="fa fa-bed fa-3x" style="color: #c9965e; margin-bottom: 15px;"></i>
+                        <h4>Hotéis</h4>
+                        <ul style="list-style: none; padding: 0;">
+                            <li><a href="https://www.booking.com/Share-a19eQIv" target="_blank"
+                                    style="color: #555; text-decoration: underline;">Hilton</a></li>
+                            <li><a href="https://www.booking.com/Share-LmaP7xJ" target="_blank"
+                                    style="color: #555; text-decoration: underline;">Hyatt</a></li>
+                            <li><a href="https://www.booking.com/Share-dEnHfzF" target="_blank"
+                                    style="color: #555; text-decoration: underline;">Ibis</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin-top: 30px;">
+                <div class="col-md-6 text-center">
+                    <div class="service-box">
+                        <i class="fa fa-female fa-3x" style="color: #c9965e; margin-bottom: 15px;"></i>
+                        <h4>Maquiagem / Salão</h4>
+                        <p><em>(Espaço reservado para indicação de maquiadores/cabeleireiros)</em></p>
+                    </div>
+                </div>
+                <div class="col-md-6 text-center">
+                    <div class="service-box">
+                        <i class="fa fa-cutlery fa-3x" style="color: #c9965e; margin-bottom: 15px;"></i>
+                        <h4>Restaurantes</h4>
+                        <p><em><a href="https://maps.app.goo.gl/UPLzWfEo15j7ZEBL9">Famiglia Arnoni</a></em></p>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-3 hidden-sm hidden-xs"></div>
-            <div class="col-md-6" style="text-align: center;">
-                <p id="trajes"></p>
+    </section>
+
+    <section id="eng-pics" class="section-padding">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <h3 class="header">Traje</h3>
+                </div>
             </div>
-            <div class="col-md-3 hidden-sm hidden-xs"></div>
+            <div class="row">
+                <div class="col-md-3 hidden-sm hidden-xs"></div>
+                <div class="col-md-6" style="text-align: center;">
+                    <p id="trajes"></p>
+                    <img id="trajes-img" src="" alt="Trajes"
+                        style="max-width: 100%; height: auto; margin-top: 20px; border-radius: 8px;">
+                </div>
+                <div class="col-md-3 hidden-sm hidden-xs"></div>
+            </div>
         </div>
-    </div>
-    <div class="container">
-        <div class="row hidden-lg hidden-md hidden-xs">
-            <div class="col-xs-12 section-border section-padding"></div>
+        <div class="container">
+            <div class="row hidden-lg hidden-md hidden-xs">
+                <div class="col-xs-12 section-border section-padding"></div>
+            </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<section class="rsvp text-center" id="rsvp">
+    <section class="rsvp text-center" id="rsvp">
 
-    <div id="rsvp-modal" class="modal fade" tabindex="-1" role="dialog">
+        <div id="rsvp-modal" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span>&times;</span>
+                        </button>
+                        <div class="section-padding">
+                            <h3>Obrigado!</h3>
+                            <p>Ficamos felizes que se juntará a nós em nosso grande dia.</p>
+                            <div id="add-to-cal"></div>
+                        </div>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+
+        <div class="container">
+            <div class="row" style="margin-top: 40px;">
+                <div class="col-md-6 col-md-offset-3">
+                    <h3>Répondez s'il vous plaît</h3>
+                    <p>Apreciaremos se puder nos avisar sobre sua presença até a data: <span id="rspvlimitdate"></span>
+                    </p>
+                    <form id="rsvp-form" class="rsvp-form" action="" method="POST">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <input type="text" name="name" class="form-control" placeholder="Nome Completo"
+                                    required>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top: 25px; margin-bottom: 25px; text-align: center;">
+                            <label
+                                style="color: #666; font-weight: 400; display: block; margin-bottom: 15px; font-size: 16px;">Você
+                                irá
+                                ao evento?</label>
+                            <div style="display: inline-block;">
+                                <label class="radio-inline" style="margin-right: 20px;">
+                                    <input type="radio" name="attendance" value="Sim" checked> Sim
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="attendance" value="Não"> Não
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-sm-6">
+                                <select name="adults" id="adults-select" class="form-control">
+                                    <option value="" selected disabled>Qtd. Adultos (incluindo você)</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 col-sm-6">
+                                <select name="kids" id="kids-select" class="form-control">
+                                    <option value="" disabled selected>Qtd. Crianças (6-10 anos)</option>
+                                    <option value="0">0</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Dynamic Name Fields -->
+                        <div id="adult-names-container" style="margin-top: 15px;"></div>
+                        <div id="kid-names-container"></div>
+
+                        <div class="row" style="margin-top: 15px;">
+                            <div class="col-md-6 col-sm-6">
+                                <input type="email" name="email" class="form-control" placeholder="Seu e-mail" required>
+                            </div>
+                            <div class="col-md-6 col-sm-6">
+                                <input type="tel" name="phone" class="form-control" placeholder="Telefone para contato"
+                                    pattern="[0-9]+" required>
+                            </div>
+                        </div>
+
+                        <div class="row" style="margin-top: 15px; margin-bottom: 30px;">
+                            <div class="col-md-12">
+                                <textarea name="obs" class="form-control"
+                                    placeholder="Observações (restrições alimentares, etc)" rows="3"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12" id="alert-wrapper"></div>
+                        </div>
+                        <button class="btn-fill rsvp-btn">
+                            Confirmar!
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="gifts section-padding" id="gifts" style="background: #f8f9fd;">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h3 class="header" style="text-align: center;">Presentes</h3>
+                </div>
+            </div>
+            <div class="row" id="gifts-list">
+                <!-- Gifts will be dynamically inserted here -->
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Modal Structure -->
+    <div class="modal fade" id="giftModal" tabindex="-1" role="dialog" aria-labelledby="giftModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <div class="modal-body">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span>&times;</span>
-                    </button>
-                    <div class="section-padding">
-                        <h3>Obrigado!</h3>
-                        <p>Ficamos felizes que se juntará a nós em nosso grande dia.</p>
-                        <div id="add-to-cal"></div>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="giftModalLabel">Detalhes do Presente</h5>
+                </div>
+                <div class="modal-body text-center">
+                    <form id="qrForm">
+                        <div class="form-group">
+                            <label for="descriptionInput">Nome:</label>
+                            <input type="text" class="form-control" id="descriptionInput" placeholder="Digite seu nome">
+                        </div>
+                        <button type="button" class="btn btn-primary" id="generateQrCodeBtn">Gerar Pix QR Code</button>
+                    </form>
+                    <div id="qrCodeContainer" style="margin-top: 20px; display: none;">
+                        <img id="modalQrCode" src="" alt="QR Code"
+                            style="width: 200px; height: 200px; object-fit: cover;">
+                        <p id="modalText"></p>
                     </div>
                 </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
-
-    <div class="container">
-        <div class="row">
-            <div class="col-md-6 col-md-offset-3">
-                <h3>RSVP</h3>
-                <p>Apreciaremos se puder nos avisar sobre sua presença até a data: <span id="rspvlimitdate"></span></p>
-                <form id="rsvp-form" class="rsvp-form"
-                      action=""
-                      method="POST">
-                    <div class="row">
-                        <div class="col-md-6 col-sm-6">
-                            <div class="form-input-group">
-                                <i class="fa fa-envelope"></i><input type="email" name="email" class=""
-                                                                     placeholder="Seu email"
-                                                                     required>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-sm-6">
-                            <div class="form-input-group">
-                                <i class="fa fa-user"></i><input name="name" class=""
-                                                                 placeholder="Seu nome"
-                                                                 required>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 col-sm-6">
-                            <div class="form-input-group">
-                                <i class="fa fa-users"></i><input type="number" name="extras" class="" min="0"
-                                                                  max="1"
-                                                                  placeholder="Número de acompanhantes"
-                                                                  required>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-sm-6">
-                            <div class="form-input-group">
-                                <i class="fa fa-user"></i><input name="name" class=""
-                                                                 placeholder="Nome do acompanhante"
-                                                                 required>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12" id="alert-wrapper"></div>
-                    </div>
-                    <button class="btn-fill rsvp-btn">
-                        Confirmar!
-                    </button>
-                </form>
-            </div>
-        </div>
-    </div>
-</section>
-
-
-<section class="gifts section-padding" id="gifts" style="background: #f8f9fd;">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <h3 class="header" style="text-align: center;">Presentes</h3>
-            </div>
-        </div>
-        <div class="row" id="gifts-list">
-            <!-- Gifts will be dynamically inserted here -->
-        </div>
-    </div>
-</section>
-
-
-<!-- Modal Structure -->
-<div class="modal fade" id="giftModal" tabindex="-1" role="dialog" aria-labelledby="giftModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="giftModalLabel">Detalhes do Presente</h5>
-            </div>
-            <div class="modal-body text-center">
-                <form id="qrForm">
-                    <div class="form-group">
-                        <label for="descriptionInput">Nome:</label>
-                        <input type="text" class="form-control" id="descriptionInput" placeholder="Digite seu nome">
-                    </div>
-                    <button type="button" class="btn btn-primary" id="generateQrCodeBtn">Gerar Pix QR Code</button>
-                </form>
-                <div id="qrCodeContainer" style="margin-top: 20px; display: none;">
-                    <img id="modalQrCode" src="" alt="QR Code" style="width: 200px; height: 200px; object-fit: cover;">
-                    <p id="modalText"></p>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+        </div>
+    </div>
+
+    <!-- Modal Structure for Custom Gift -->
+    <div class="modal fade" id="customGiftModal" tabindex="-1" role="dialog" aria-labelledby="customGiftModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="customGiftModalLabel">Outro Valor</h5>
+                </div>
+                <div class="modal-body text-center">
+                    <form id="customQrForm">
+                        <div class="form-group">
+                            <label for="customGiftName">Nome:</label>
+                            <input type="text" class="form-control" id="customGiftName" placeholder="Digite seu nome">
+                        </div>
+                        <div class="form-group">
+                            <label for="customGiftValue">Valor (R$):</label>
+                            <input type="number" class="form-control" id="customGiftValue" placeholder="00,00"
+                                step="0.01" min="1">
+                        </div>
+                        <button type="button" class="btn btn-primary" id="generateCustomQrCodeBtn">Gerar Pix QR
+                            Code</button>
+                    </form>
+                    <div id="custom_qrCodeContainer" style="margin-top: 20px; display: none;">
+                        <img id="custom_modalQrCode" src="" alt="QR Code"
+                            style="width: 200px; height: 200px; object-fit: cover;">
+                        <p id="custom_modalText"></p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
 
-<footer>
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-12 text-center content">
-                <span class="to-top-wrapper"><a href="#top" class="to-top"><i class="fa fa-angle-up"></i></a></span>
-                <p><a id="whatsapp-link" href="#" target="_blank">Quer um site assim para seu casamento?</a></p>
-            </div>
-        </div>
-    </div>
-</footer>
-<script src="js/vendor/jquery-1.11.2.min.js" onerror="loadJsFromCDN('jquery.js')"></script>
-<script src="node_modules/waypoints/lib/jquery.waypoints.min.js" onerror="loadJsFromCDN('waypoints.js')"></script>
-<script src="js/jquery.fancybox.pack.js"></script>
-<script src="js/vendor/bootstrap.min.js"></script>
-<script src="js/jquery.flexslider-min.js"></script>
-<script src="js/jquery.mb.YTPlayer.min.js"></script>
-<script src="js/vendor/ouical.js"></script>
-<script src="js/Pix.js"></script>
-<script src="js/scripts.min.js"></script>
 
-<script>
-    const isMobile = /android|iphone|ipad|mobile/i.test(navigator.userAgent);
-    const whatsappNumber = "5511942152384";
-    const whatsappMessage = "Olá! Gostaria de um site para meu casamento.";
-    
-    const whatsappLink = isMobile 
-        ? `whatsapp://send?phone=${whatsappNumber}&text=${encodeURIComponent(whatsappMessage)}`
-        : `https://api.whatsapp.com/send?phone=${whatsappNumber}&text=${encodeURIComponent(whatsappMessage)}`;
+    <script src="js/vendor/jquery-1.11.2.min.js" onerror="loadJsFromCDN('jquery.js')"></script>
+    <script src="node_modules/waypoints/lib/jquery.waypoints.min.js" onerror="loadJsFromCDN('waypoints.js')"></script>
+    <script src="js/jquery.fancybox.pack.js"></script>
+    <script src="js/vendor/bootstrap.min.js"></script>
+    <script src="js/jquery.flexslider-min.js"></script>
+    <script src="js/jquery.mb.YTPlayer.min.js"></script>
+    <script src="js/vendor/ouical.js"></script>
+    <script src="js/Pix.js"></script>
+    <!-- Use unminified scripts.js for latest changes -->
+    <script src="js/scripts.js"></script>
 
-    document.getElementById('whatsapp-link').href = whatsappLink;
-</script>
+    <script>
+        const isMobile = /android|iphone|ipad|mobile/i.test(navigator.userAgent);
+        const whatsappNumber = "5511942152384";
+        const whatsappMessage = "Olá! Gostaria de um site para meu casamento.";
 
-<script>
-    const data = {
-        "weddingnames":"Maitê & Henrique",
-        "bgpicture":"https://wedding.rampatra.com/img/hero-min.jpg",
-        "story": "I first saw Antara in the Fall of 2008 when we started our undergrad. I was instantly attracted to her but was far too nervous to speak to her. I had told my friend I liked her and news had traveled fast and she soon found out. Her first reaction was 'Who is Ram?' and she began searching for me in the class. She started to take notice of me and no matter how boring the lecture was, we never missed a class after that. After a good few months I finally plucked up the courage to ask her out and the rest is history :)",
-        "trajes": "Social Completo",
-        "weddingdate": "07 de Setembro de 2025",
-        "rspvlimitdate": "05/09/2025",
-        "places":2,
-        "place1time": "17PM - 18PM",
-        "place1name": "Nossa Senhora do Brasil",
-        "place1address": "Praça Nossa Sra. do Brasil, 01 - Jardim America, São Paulo - SP, 01438-060",
-        "place2time": "18PM - 04AM",
-        "place2name": "Club Homs",
-        "place2address": "Av. Paulista, 735 - Jardins, São Paulo - SP, 01418-100",
-        "presentes": 12, 
-        "gifts": [
-            {"name": "Utensílios de Cozinha", "price": 60, "image": "https://pixnio.com/free-images/2020/12/19/2020-12-19-13-33-59-1152x768.jpg"},
-            {"name": "Jogo Americano", "price": 80, "image": "https://victorianprint.co.uk/wp-content/uploads/2022/03/VPCS_EM_0027-scaled.jpg"},
-            {"name": "Jogo de Toalhas", "price": 100, "image": "https://i2.pickpik.com/photos/618/236/40/towels-linens-store-bath-linen-preview.jpg"},
-            {"name": "Cafeteira", "price": 110, "image": "https://upload.wikimedia.org/wikipedia/commons/6/60/Italian-coffee-maker.svg"},
-            {"name": "Aparelho de Fondue", "price": 150, "image": "https://live.staticflickr.com/65535/52924520581_2d83cc3759_b.jpg"},
-            {"name": "Mini impressora de fotos", "price": 180, "image": "https://upload.wikimedia.org/wikipedia/commons/a/ad/Fujifilm_Instax_Mini_Link_on_the_table_at_WirForce_Shop_20221105.jpg"},
-            {"name": "Chaleira", "price": 250, "image": "https://upload.wikimedia.org/wikipedia/commons/4/44/Black_tea_pot_cropped.jpg"},
-            {"name": "Caixa de som", "price": 300, "image": "https://www.trustedreviews.com/wp-content/uploads/sites/54/2021/09/JBL-Flip-5-vertical-scaled.jpg"},
-            {"name": "Echo Dot", "price": 350, "image": "https://images.pexels.com/photos/14309805/pexels-photo-14309805.jpeg"},
-            {"name": "Cooktop", "price": 400, "image": "https://environmentamerica.org/wp-content/uploads/2022/02/PIRG_Gas-Stove-rawpixel-id-5925804-Public-Domain_WEB.jpg"},
-            {"name": "Jantar Estrela Michelin", "price": 500, "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQfmCJR1TMHCK6MYeIR8csbpwagbnlUomXggg&s"},
-            {"name": "Diária da Lua de Mel", "price": 1000, "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRX3B8pK9FnsoAR1eOnbnch5a6mhQeVWLIJQA&s"}
-        ],
-        "pix":"37873863867",
-        "beneficiariopix": "Henrique",
-        "cidadepix":"São Paulo",
-        "hash": "a991e84c62a25c5a972f67c47cd81f31063c2dde905a8428977b0458073465cd",
-    };
+        const whatsappLink = isMobile
+            ? `whatsapp://send?phone=${whatsappNumber}&text=${encodeURIComponent(whatsappMessage)}`
+            : `https://api.whatsapp.com/send?phone=${whatsappNumber}&text=${encodeURIComponent(whatsappMessage)}`;
 
-    function checkPassword() {
+        document.getElementById('whatsapp-link').href = whatsappLink;
+    </script>
 
-        // Hash the input password
-        var password = prompt("Insira a senha:");
-        var inputHash = CryptoJS.SHA256(password).toString();
-        
-        // Compare the input hash with the stored hash
-        if (inputHash != data.hash) {
-            window.location = "https://www.google.com";  // Redirect to a different page
-        }
-    }
+    <script>
+        const data = {
+            "weddingnames": "Maitê e Henrique",
+            "bgpicture": "img/hemcasamento.png",
+            "story": "I first saw Antara in the Fall of 2008 when we started our undergrad. I was instantly attracted to her but was far too nervous to speak to her. I had told my friend I liked her and news had traveled fast and she soon found out. Her first reaction was 'Who is Ram?' and she began searching for me in the class. She started to take notice of me and no matter how boring the lecture was, we never missed a class after that. After a good few months I finally plucked up the courage to ask her out and the rest is history :)",
+            "trajes": "Traje Coquetel Semiformal",
+            "trajelink": "img/trajes.png",
+            "weddingdate": "01 de Novembro de 2026",
+            "weddingdate_iso": "2026-11-01T17:00:00",
+            "rspvlimitdate": "01/08/2026",
+            "places": 2,
+            "place1time": "17:00",
+            "place1name": "Garden Noor",
+            "place1address": "Rodovia Padre Mariano Aparício de La Mata, 300, Estância Bela Vista, São José do Rio Preto 15077-456",
+            "presentes": 13,
+            "gifts": [
+                { "name": "Utensílios de Cozinha", "price": 60, "image": "https://pixnio.com/free-images/2020/12/19/2020-12-19-13-33-59-1152x768.jpg" },
+                { "name": "Jogo Americano", "price": 80, "image": "https://victorianprint.co.uk/wp-content/uploads/2022/03/VPCS_EM_0027-scaled.jpg" },
+                { "name": "Jogo de Toalhas", "price": 100, "image": "https://i2.pickpik.com/photos/618/236/40/towels-linens-store-bath-linen-preview.jpg" },
+                { "name": "Cafeteira", "price": 110, "image": "https://upload.wikimedia.org/wikipedia/commons/6/60/Italian-coffee-maker.svg" },
+                { "name": "Aparelho de Fondue", "price": 150, "image": "https://live.staticflickr.com/65535/52924520581_2d83cc3759_b.jpg" },
+                { "name": "Mini impressora de fotos", "price": 180, "image": "https://upload.wikimedia.org/wikipedia/commons/a/ad/Fujifilm_Instax_Mini_Link_on_the_table_at_WirForce_Shop_20221105.jpg" },
+                { "name": "Chaleira", "price": 250, "image": "https://upload.wikimedia.org/wikipedia/commons/4/44/Black_tea_pot_cropped.jpg" },
+                { "name": "Caixa de som", "price": 300, "image": "https://www.trustedreviews.com/wp-content/uploads/sites/54/2021/09/JBL-Flip-5-vertical-scaled.jpg" },
+                { "name": "Echo Dot", "price": 350, "image": "https://images.pexels.com/photos/14309805/pexels-photo-14309805.jpeg" },
+                { "name": "Cooktop", "price": 400, "image": "https://environmentamerica.org/wp-content/uploads/2022/02/PIRG_Gas-Stove-rawpixel-id-5925804-Public-Domain_WEB.jpg" },
+                { "name": "Jantar Estrela Michelin", "price": 500, "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQfmCJR1TMHCK6MYeIR8csbpwagbnlUomXggg&s" },
+                { "name": "Diária da Lua de Mel", "price": 1000, "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRX3B8pK9FnsoAR1eOnbnch5a6mhQeVWLIJQA&s" },
+                { "name": "Vaso Murano Gout 35 cm", "price": 2000, "image": "https://cdn-assets-legacy.casar.com/thumb/208x208x1/img/presentes/shopping-camicado/Vaso_Murano_Gout_35_cm.jpg" },
+                { "name": "Adega 33 Garrafas Compressor", "price": 4000, "image": "https://cdn-assets-legacy.casar.com/thumb/208x208x1/img/presentes/shopping-camicado/Adega_33_Garrafas_Compressor.jpg" },
+            ],
+            "pix": "37873863867",
+            "beneficiariopix": "Henrique",
+            "cidadepix": "São Paulo",
+            "hash": "92a70799e19d8734fecfb8e59aa930e9f386f7645059a1f2f04eb8483c9b5f1d",
+        };
 
-    // Função para gerar um txid aleatório de até 25 caracteres alfanuméricos
-    function generateTxid() {
-        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        let txid = '';
-        for (let i = 0; i < 25; i++) {
-            txid += characters.charAt(Math.floor(Math.random() * characters.length));
-        }
-        return txid;
-    }
+        function checkPassword() {
 
-    function sanitizeName(city) {
-        // Remover acentos e caracteres especiais
-        city = city.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-        // Converter para maiúsculas
-        city = city.toUpperCase();
-        // Substituir espaços por um asterisco ou outro caractere
-        city = city.replace(/\s/g, "*");
-        // Retornar a cidade tratada
-        return city;
-    }
+            // Hash the input password
+            var password = prompt("Insira a senha:");
+            var inputHash = CryptoJS.SHA256(password).toString();
 
-    document.addEventListener("DOMContentLoaded", function() {
-
-        // Select the .hero section and set the background image
-        const heroSection = document.querySelector('.hero');
-        heroSection.style.backgroundImage = `url(${data.bgpicture})`;
-        heroSection.style.backgroundSize = 'cover';  // Cover the entire section
-        heroSection.style.backgroundPosition = 'center';  // Center the image within the section
-        
-        if (data.presentes === 0) {
-            const giftsSection = document.getElementById('gifts');
-            if (giftsSection) {
-                giftsSection.remove();  // Remove the section if no gifts are present
+            // Compare the input hash with the stored hash
+            if (inputHash != data.hash) {
+                window.location = "https://www.google.com";  // Redirect to a different page
             }
-        } else {
-            const giftsList = document.getElementById('gifts-list');
+        }
 
-            data.gifts.forEach(function(gift, index) {
-                const giftBox = document.createElement('div');
-                giftBox.className = 'col-md-6 col-sm-12';
-                giftBox.style.padding = '10px';
+        // Função para gerar um txid aleatório de até 25 caracteres alfanuméricos
+        function generateTxid() {
+            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            let txid = '';
+            for (let i = 0; i < 25; i++) {
+                txid += characters.charAt(Math.floor(Math.random() * characters.length));
+            }
+            return txid;
+        }
 
-                giftBox.innerHTML = `
+        function sanitizeName(city) {
+            // Remover acentos e caracteres especiais
+            city = city.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+            // Converter para maiúsculas
+            city = city.toUpperCase();
+            // Substituir espaços por um asterisco ou outro caractere
+            city = city.replace(/\s/g, "*");
+            // Retornar a cidade tratada
+            return city;
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+
+            // Select the .hero section and set the background image
+            const heroSection = document.querySelector('.hero');
+            heroSection.style.backgroundImage = `url(${data.bgpicture})`;
+            heroSection.style.backgroundSize = 'cover';  // Cover the entire section
+            heroSection.style.backgroundPosition = 'center';  // Center the image within the section
+
+            if (data.presentes === 0) {
+                const giftsSection = document.getElementById('gifts');
+                if (giftsSection) {
+                    giftsSection.remove();  // Remove the section if no gifts are present
+                }
+            } else {
+                const giftsList = document.getElementById('gifts-list');
+
+                data.gifts.forEach(function (gift, index) {
+                    const giftBox = document.createElement('div');
+                    giftBox.className = 'col-md-6 col-sm-12';
+                    giftBox.style.padding = '10px';
+
+                    giftBox.innerHTML = `
                     <div style="border: 1px solid #ddd; border-radius: 8px; padding: 35px; text-align: center; background-color: #fff; cursor: pointer;">
                         <img src="${gift.image}" alt="${gift.name}" style="width: 200px; height: 200px; object-fit: cover; border-radius: 8px;">
                         <h4 style="margin-top: 30px;">${gift.name}</h4>
@@ -426,87 +576,129 @@
                     </div>
                 `;
 
-                giftBox.addEventListener('click', function() {
+                    giftBox.addEventListener('click', function () {
+                        // Update the modal content
+                        document.getElementById('giftModalLabel').textContent = gift.name;
+                        document.getElementById('descriptionInput').value = ''; // Clear previous input
+                        document.getElementById('qrCodeContainer').style.display = 'none'; // Hide QR Code section
+
+                        // Show the modal
+                        $('#giftModal').modal('show');
+
+                        // Attach event listener to the Generate QR Code button
+                        document.getElementById('generateQrCodeBtn').onclick = function () {
+                            let giftername = document.getElementById('descriptionInput').value;
+                            if (giftername.trim() !== '') {
+
+                                // Gerar txid aleatório
+                                let txid = generateTxid();
+
+                                generateQrCode(gift.name, gift.price, txid, giftername); // Passar o txid gerado
+
+                            } else {
+                                alert('Digite o nome de quem deu o presente.');
+                            }
+                        };
+                    });
+
+                    giftsList.appendChild(giftBox);
+                });
+
+                // Add "Outro Valor" card
+                const customGiftBox = document.createElement('div');
+                customGiftBox.className = 'col-md-6 col-sm-12';
+                customGiftBox.style.padding = '10px';
+                customGiftBox.innerHTML = `
+                    <div style="border: 1px solid #ddd; border-radius: 8px; padding: 35px; text-align: center; background-color: #fff; cursor: pointer;">
+                        <div style="width: 200px; height: 200px; background-color: #eee; border-radius: 8px; margin: 0 auto; display: flex; align-items: center; justify-content: center;">
+                            <i class="fa fa-gift fa-4x" style="color: #ccc;"></i>
+                        </div>
+                        <h4 style="margin-top: 30px;">Outro Valor</h4>
+                        <p style="padding-bottom: 0px">Valor Livre</p>
+                    </div>
+                `;
+
+                customGiftBox.addEventListener('click', function () {
                     // Update the modal content
-                    document.getElementById('giftModalLabel').textContent = gift.name;
-                    document.getElementById('descriptionInput').value = ''; // Clear previous input
-                    document.getElementById('qrCodeContainer').style.display = 'none'; // Hide QR Code section
+                    document.getElementById('customGiftName').value = ''; // Clear previous input
+                    document.getElementById('customGiftValue').value = ''; // Clear previous input
+                    document.getElementById('custom_qrCodeContainer').style.display = 'none'; // Hide QR Code section
 
                     // Show the modal
-                    $('#giftModal').modal('show');
+                    $('#customGiftModal').modal('show');
 
                     // Attach event listener to the Generate QR Code button
-                    document.getElementById('generateQrCodeBtn').onclick = function() {
-                        let giftername = document.getElementById('descriptionInput').value;
-                        if (giftername.trim() !== '') {
-                            
+                    document.getElementById('generateCustomQrCodeBtn').onclick = function () {
+                        let giftername = document.getElementById('customGiftName').value;
+                        let giftValueInput = document.getElementById('customGiftValue').value;
+                        let giftValueFloat = parseFloat(giftValueInput);
+
+                        if (giftername.trim() !== '' && !isNaN(giftValueFloat) && giftValueFloat > 0) {
+
+                            let giftValue = giftValueFloat.toFixed(2);
+
                             // Gerar txid aleatório
                             let txid = generateTxid();
-                            
-                            generateQrCode(gift.name, gift.price, txid, giftername); // Passar o txid gerado
+
+                            generateQrCode('Presente Livre', giftValue, txid, giftername, 'custom_'); // Passar o txid gerado e o prefix
 
                         } else {
-                            alert('Digite o nome de quem deu o presente.');
+                            alert('Por favor, preencha o nome e um valor válido.');
                         }
                     };
                 });
 
-                giftsList.appendChild(giftBox);
-            });
-        }
+                giftsList.appendChild(customGiftBox);
+            }
 
-        if (data.places === 1) {
-            // Adjust the layout to one column
-            const leftCol = document.querySelector('.leftcol');
-            const rightCol = document.querySelector('.rightcol');
+            if (data.places === 1) {
+                // Adjust the layout to one column
+                const leftCol = document.querySelector('.leftcol');
+                const rightCol = document.querySelector('.rightcol');
 
-            // Merge rightcol into leftcol and hide the rightcol
-            leftCol.classList.remove('col-md-6');
-            leftCol.classList.add('col-md-12');
-            leftCol.style.textAlign = 'center';
-            leftCol.style.paddingRight = '15px';
-            rightCol.style.display = 'none';
+                // Merge rightcol into leftcol and hide the rightcol
+                leftCol.classList.remove('col-md-6');
+                leftCol.classList.add('col-md-12');
+                leftCol.style.textAlign = 'center';
+                leftCol.style.paddingRight = '15px';
+                rightCol.style.display = 'none';
 
-            // Update only the first place
-            document.getElementById('place1time').textContent = data.place1time;
-            document.getElementById('place1name').textContent = data.place1name;
-            // Create a Google Maps link for the place2address
-            const place1AddressElement = document.getElementById('place1address');
-            const address1 = data.place1address;
-            const mapsUrl1 = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
-            place1AddressElement.innerHTML = `<a href="${mapsUrl}" target="_blank">${address}</a>`;
+                // Update only the first place
+                document.getElementById('place1time').textContent = data.place1time;
+                document.getElementById('place1name').textContent = data.place1name;
+                // Create a Google Maps link for the place2address
+                const place1AddressElement = document.getElementById('place1address');
+                const address1 = data.place1address;
+                const mapsUrl1 = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
+                place1AddressElement.innerHTML = `<a href="${mapsUrl}" target="_blank">${address}</a>`;
 
 
-        } else if (data.places === 2) {
-            // Two columns, populate both
-            document.getElementById('place1time').textContent = data.place1time;
-            document.getElementById('place1name').textContent = data.place1name;
-            // Create a Google Maps link for the place2address
-            const place1AddressElement = document.getElementById('place1address');
-            const address1 = data.place1address;
-            const mapsUrl1 = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address1)}`;
-            place1AddressElement.innerHTML = `<a href="${mapsUrl1}" target="_blank">${address1}</a>`;
+            } else if (data.places === 2) {
+                // Two columns, populate both
+                document.getElementById('place1time').textContent = data.place1time;
+                document.getElementById('place1name').textContent = data.place1name;
+                // Create a Google Maps link for the place2address
+                const place1AddressElement = document.getElementById('place1address');
+                const address1 = data.place1address;
+                const mapsUrl1 = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address1)}`;
+                place1AddressElement.innerHTML = `<a href="${mapsUrl1}" target="_blank">${address1}</a>`;
 
-            document.getElementById('place2time').textContent = data.place2time;
-            document.getElementById('place2name').textContent = data.place2name;
+            }
+            document.getElementById('weddingnames').textContent = data.weddingnames;
+            document.getElementById('trajes').textContent = data.trajes;
+            if (data.trajelink) {
+                document.getElementById('trajes-img').src = data.trajelink;
+            } else {
+                document.getElementById('trajes-img').style.display = 'none';
+            }
+            document.getElementById('weddingdate').textContent = data.weddingdate;
+            document.getElementById('rspvlimitdate').textContent = data.rspvlimitdate
 
-            // Create a Google Maps link for the place2address
-            const place2AddressElement = document.getElementById('place2address');
-            const address2 = data.place2address;
-            const mapsUrl2 = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address2)}`;
-            place2AddressElement.innerHTML = `<a href="${mapsUrl2}" target="_blank">${address2}</a>`;
 
-        }
-        document.getElementById('weddingnames').textContent = data.weddingnames;
-        document.getElementById('story').textContent = data.story;
-        document.getElementById('trajes').textContent = data.trajes;
-        document.getElementById('weddingdate').textContent = data.weddingdate;
-        document.getElementById('rspvlimitdate').textContent = data.rspvlimitdate
-
-        
-    });
-</script>
+        });
+    </script>
 
 
 </body>
+
 </html>

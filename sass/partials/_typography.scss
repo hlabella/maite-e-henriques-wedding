@@ -1,11 +1,12 @@
 // Typography partial
-@import "partials/colors";
+@use "colors" as *;
 
 // Fonts
 
-$sans-serif: 'Open Sans', sans-serif;
-$serif: Merriweather, Georgia, 'Times New Roman', serif;
-$accent-font: 'Nunito', sans-serif;
+$sans-serif: 'Sorts Mill Goudy', serif; // Using Goudy as the main body font for that vintage feel
+$serif: 'Spectral', serif;
+$accent-font: 'Italiana', serif; // For headings
+$decorative-font: 'Cinzel Decorative', cursive; // For special accents
 
 // Weights
 
@@ -17,13 +18,13 @@ $bold: 700;
 // Sizes
 
 $font-size-h1: 60px;
-$font-size-h2: 40px;
-$font-size-h3: 24px;
-$font-size-h4: 18px;
-$font-size-h5: 15px;
-$font-size-p: 15px;
-$nav-font-size: 13px;
-$blog-post-title: 11px;
+$font-size-h2: 45px; // Slightly larger
+$font-size-h3: 28px;
+$font-size-h4: 20px;
+$font-size-h5: 16px;
+$font-size-p: 16px; // Slightly larger for readability with serif
+$nav-font-size: 14px;
+$blog-post-title: 12px;
 
 // Responsive Sizes
 
@@ -31,7 +32,7 @@ $responsive-h1: 40px;
 
 // Line height
 
-$base-line-height: 29px;
+$base-line-height: 30px;
 
 // Styles
 
@@ -39,6 +40,7 @@ $base-line-height: 29px;
 Typography
 ========================================================================== */
 p {
+  font-family: $sans-serif;
   font-size: $font-size-p;
   line-height: $base-line-height;
   color: $txt-primary;
@@ -46,16 +48,28 @@ p {
 }
 
 h1 {
+  font-family: $decorative-font;
   font-size: $font-size-h1;
+  font-weight: $bold;
+  color: $primary-blue;
+  letter-spacing: 2px;
 }
 
 h2 {
+  font-family: $accent-font;
   font-size: $font-size-h2;
-  font-weight: $light;
+  font-weight: $normal;
   color: $h2-color;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  border-bottom: 1px solid $primary-blue;
+  display: inline-block;
+  padding-bottom: 10px;
+  margin-bottom: 30px;
 }
 
 h3 {
+  font-family: $accent-font;
   color: $h3-color;
   font-size: $font-size-h4;
   font-weight: $bold;
@@ -65,12 +79,16 @@ h3 {
 }
 
 h4 {
+  font-family: $sans-serif;
   font-size: $font-size-h4;
+  font-weight: $semibold;
 }
 
 h5 {
+  font-family: $accent-font;
   font-size: $font-size-h5;
   color: $h5-color;
   text-transform: uppercase;
   font-weight: $semibold;
+  letter-spacing: 2px;
 }

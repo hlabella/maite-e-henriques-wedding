@@ -7,7 +7,10 @@ const babel = require('gulp-babel');
 // Compile SCSS to CSS
 gulp.task('sass', function () {
     return gulp.src('./sass/styles.scss')
-        .pipe(sass({ outputStyle: 'compressed' }).on('error', sass.logError))
+        .pipe(sass({ 
+            outputStyle: 'compressed',
+            silenceDeprecations: ['legacy-js-api']
+        }).on('error', sass.logError))
         .pipe(rename({ basename: 'styles.min' }))
         .pipe(gulp.dest('./css'));
 });

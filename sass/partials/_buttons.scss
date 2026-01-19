@@ -1,6 +1,6 @@
 // Buttons partial
 
-@import "partials/colors";
+@use "colors" as *;
 
 .btn {
 	font-size: 13px;
@@ -11,11 +11,14 @@
 	display: inline-block;
 	text-transform: uppercase;
 }
-.btn:hover, .btn:focus {
+
+.btn:hover,
+.btn:focus {
 	color: $white-color;
 	border-color: $accent-color;
 	background-color: $accent-color;
 }
+
 .btn-white {
 	font-size: 13px;
 	border: solid 2px;
@@ -25,10 +28,13 @@
 	display: inline-block;
 	border-color: $txt-light;
 }
-.btn-white:hover, .btn-white:focus {
+
+.btn-white:hover,
+.btn-white:focus {
 	color: $accent-color;
 	border-color: $accent-color;
 }
+
 .btn-fill {
 	color: $white-color;
 	border: solid 2px $accent-color;
@@ -39,17 +45,22 @@
 	text-transform: uppercase;
 	background-color: $accent-color;
 }
-.btn-fill:hover, .btn-fill:focus {
+
+.btn-fill:hover,
+.btn-fill:focus {
 	color: $white-color;
 	background-color: $accent-color-hover;
 	border-color: $accent-color-hover;
 }
+
 .btn-small {
 	padding: 8px 30px;
 }
+
 .btn-large {
 	padding: 15px 40px;
 }
+
 .btn-margin-right {
 	margin-right: 20px;
 }

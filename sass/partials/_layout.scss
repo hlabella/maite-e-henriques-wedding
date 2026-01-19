@@ -1,10 +1,74 @@
 // Layout variables partial
+// Layout variables partial
+@use "colors" as *;
+@use "typography" as *;
 
-$section-padding: 40px 0;
+$section-padding: 60px 0; // Increased padding for more elegance
 
-section.intro, section.features-extra, section.rsvp {
-	background: $section-light;
+// Alternating Backgrounds
+
+// 1. Date (Light)
+section#date {
+	background: $section-alt-1;
 }
-section.features, section.events, section.blog {
-	background: $section-dark;
+
+// 2. Events/Local (Darker/Alt)
+section.events,
+section#events {
+	background: $section-alt-2;
+}
+
+// 3. Trajes/Eng-pics (Light)
+section#eng-pics {
+	background: $section-alt-1;
+}
+
+// 4. RSVP (Darker/Alt)
+section.rsvp,
+section#rsvp {
+	background: $section-alt-2;
+}
+
+// 5. Gifts (Light)
+section.gifts,
+section#gifts {
+	background: $section-alt-1 !important; // Override inline style if present
+}
+
+section.intro,
+section.features-extra {
+	background: $section-alt-1;
+}
+
+section.features,
+section.blog {
+	background: $section-alt-2;
+}
+
+// Countdown Styles
+.countdown-box {
+	border: 2px solid $primary-blue;
+	border-radius: 8px; // Rounded corners for elegance
+	padding: 15px 10px;
+	margin-bottom: 20px;
+	background-color: rgba($white, 0.8); // Slight transparency
+
+	span {
+		display: block;
+		font-family: $decorative-font;
+		font-size: 36px;
+		color: $primary-blue;
+		font-weight: $bold;
+		line-height: 1;
+	}
+
+	p {
+		font-family: $sans-serif;
+		text-transform: uppercase;
+		font-size: 12px;
+		letter-spacing: 2px;
+		margin-bottom: 0;
+		padding-bottom: 0;
+		color: $txt-secondary;
+	}
 }

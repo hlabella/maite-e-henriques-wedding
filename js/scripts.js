@@ -159,23 +159,23 @@ $(document).ready(function () {
         },
         data: {
             // Event title
-            title: "Ram and Antara's Wedding",
+            title: "Casamento Henrique e Maitê",
 
             // Event start date
-            start: new Date('Nov 27, 2017 10:00'),
+            start: new Date('Nov 1, 2026 17:00'),
 
             // Event duration (IN MINUTES)
             // duration: 120,
 
             // You can also choose to set an end time
             // If an end time is set, this will take precedence over duration
-            end: new Date('Nov 29, 2017 00:00'),
+            end: new Date('Nov 2, 2026 02:00'),
 
             // Event Address
-            address: 'ITC Fortune Park Hotel, Kolkata',
+            address: 'Garden Noor, ',
 
             // Event Description
-            description: "We can't wait to see you on our big day. For any queries or issues, please contact Mr. Amit Roy at +91 9876543210."
+            description: "Mal podemos esperar para te ver no nosso dia especial. Qualquer dúvida, entre em contato com +55 11 99637-3052 (Adeni Leite)"
         }
     });
 
@@ -183,32 +183,112 @@ $(document).ready(function () {
 
 
     /********************** RSVP **********************/
+    /********************** RSVP **********************/
     $('#rsvp-form').on('submit', function (e) {
         e.preventDefault();
         var data = $(this).serialize();
 
         $('#alert-wrapper').html(alert_markup('info', '<strong>Just a sec!</strong> We are saving your details.'));
 
-        if (MD5($('#invite_code').val()) !== 'b0e53b10c1f55ede516b240036b88f40'
-            && MD5($('#invite_code').val()) !== '2ac7f43695eb0479d5846bb38eec59cc') {
-            $('#alert-wrapper').html(alert_markup('danger', '<strong>Sorry!</strong> Your invite code is incorrect.'));
-        } else {
-            $.post('https://script.google.com/macros/s/AKfycbyo0rEknln8LedEP3bkONsfOh776IR5lFidLhJFQ6jdvRiH4dKvHZmtoIybvnxpxYr2cA/exec', data)
-                .done(function (data) {
-                    console.log(data);
-                    if (data.result === "error") {
-                        $('#alert-wrapper').html(alert_markup('danger', data.message));
-                    } else {
-                        $('#alert-wrapper').html('');
-                        $('#rsvp-modal').modal('show');
-                    }
-                })
-                .fail(function (data) {
-                    console.log(data);
-                    $('#alert-wrapper').html(alert_markup('danger', '<strong>Sorry!</strong> There is some issue with the server. '));
-                });
+        $.post('https://script.google.com/macros/s/AKfycbyo0rEknln8LedEP3bkONsfOh776IR5lFidLhJFQ6jdvRiH4dKvHZmtoIybvnxpxYr2cA/exec', data)
+            .done(function (data) {
+                console.log(data);
+                if (data.result === "error") {
+                    $('#alert-wrapper').html(alert_markup('danger', data.message));
+                } else {
+                    $('#alert-wrapper').html('');
+                    $('#rsvp-modal').modal('show');
+                }
+            })
+            .fail(function (data) {
+                console.log(data);
+                $('#alert-wrapper').html(alert_markup('danger', '<strong>Sorry!</strong> There is some issue with the server. '));
+            });
+    });
+
+    // Dynamic Fields Logic
+    $('#adults-select').change(function () {
+        var count = parseInt($(this).val());
+        var container = $('#adult-names-container');
+        container.empty();
+
+        if (count > 1) {
+            for (var i = 1; i < count; i++) {
+                var labelText = "Nome do Acompanhante " + i;
+                var html = `
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-input-group">
+                                <i class="fa fa-user"></i>
+                                <input type="text" name="adult_name_${i}" class="" placeholder="${labelText}" required>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.append(html);
+            }
         }
     });
+
+    $('#kids-select').change(function () {
+        var count = parseInt($(this).val());
+        var container = $('#kid-names-container');
+        container.empty();
+
+        if (count > 0) {
+            for (var i = 1; i <= count; i++) {
+                var html = `
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-input-group">
+                                <i class="fa fa-child"></i>
+                                <input type="text" name="kid_name_${i}" class="" placeholder="Nome da Criança ${i}" required>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.append(html);
+            }
+        }
+    });
+
+    /***************** Leaflet Map ******************/
+    if ($('#map').length) {
+        var map = L.map('map').setView([-20.86940, -49.32297], 15);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        L.marker([-20.86940, -49.32297]).addTo(map)
+            .bindPopup('Cerimônia e Recepção')
+            .openPopup();
+    }
+
+    /***************** Countdown Timer ******************/
+    if (typeof data !== 'undefined' && data.weddingdate_iso) {
+        const countDownDate = new Date(data.weddingdate_iso).getTime();
+
+        const x = setInterval(function () {
+            const now = new Date().getTime();
+            const distance = countDownDate - now;
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            if (document.getElementById("days")) document.getElementById("days").innerText = days < 10 ? '0' + days : days;
+            if (document.getElementById("hours")) document.getElementById("hours").innerText = hours < 10 ? '0' + hours : hours;
+            if (document.getElementById("minutes")) document.getElementById("minutes").innerText = minutes < 10 ? '0' + minutes : minutes;
+            if (document.getElementById("seconds")) document.getElementById("seconds").innerText = seconds < 10 ? '0' + seconds : seconds;
+
+            if (distance < 0) {
+                clearInterval(x);
+                if (document.getElementById("countdown")) document.getElementById("countdown").innerHTML = "<h3>É hoje!</h3>";
+            }
+        }, 1000);
+    }
 
 });
 
@@ -439,29 +519,30 @@ var MD5 = function (string) {
 };
 
 //Pix stuff
-function generateQrCode(giftName, giftPrice, txid, giftername) {
+//Pix stuff
+function generateQrCode(giftName, giftPrice, txid, giftername, prefix = '') {
     const pixKey = data.pix;
-    const pixName = sanitizeName(data.beneficiariopix); 
+    const pixName = sanitizeName(data.beneficiariopix);
     const pixCity = sanitizeName(data.cidadepix);
     const value = parseFloat(giftPrice);
     console.log("value: ", value);
     // Initialize Pix instance
     const pix = new Pix(pixKey, pixName, pixCity, txid, value);
-    
+
     // Generate the payload
     const qrCodeData = pix.getPayload();
-    
+
     console.log("qrCodeData: ", qrCodeData);
     // Generate the QR code URL
-    const modalQrCode = document.getElementById('modalQrCode');
+    const modalQrCode = document.getElementById(prefix + 'modalQrCode');
     const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(qrCodeData)}`;
     modalQrCode.src = qrCodeUrl;
 
     // Update modal text
-    document.getElementById('modalText').textContent = `Presente: ${giftName}. Valor: R$${giftPrice}. Use o QR Code acima para pagar o presente.`;
+    document.getElementById(prefix + 'modalText').textContent = `Presente: ${giftName}. Valor: R$${giftPrice}. Use o QR Code acima para pagar o presente.`;
 
     // Show QR Code section
-    document.getElementById('qrCodeContainer').style.display = 'block';
+    document.getElementById(prefix + 'qrCodeContainer').style.display = 'block';
 
     // if paid, save the gift price, and giftername in DB
 }

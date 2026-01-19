@@ -1,32 +1,42 @@
 // Colours partial
+@use "sass:color";
+
+// Updated Palette (Blue)
+$primary-blue: #2596be;
+$light-blue: color.adjust($primary-blue, $lightness: 45%); // Very light blue for alternation
+$white: #ffffff;
+$dark-slate: #2F4F4F; // Keeping for text if needed, or switching to black/dark blue
 
 // Text colours
-$txt-primary: rgba(28, 54, 83, 0.6);
-// body font
-$txt-secondary: #3D4351;
-// heading font
+$txt-primary: #333; // Darker text for readability on light backgrounds
+$txt-secondary: $primary-blue;
 $txt-light: #fff;
-// header/hero
-$txt-accent: #ACB1B4;
+$txt-accent: $primary-blue;
 $form-placeholder: #BCC1C3;
-// form placeholder text
+
 // Global colours
-$accent-color: #e8ca6f;
-// global accent colour
-$accent-color-hover: #d3b56a;
-// global accent colour hover
+$accent-color: $primary-blue;
+$accent-color-hover: color.adjust($primary-blue, $lightness: -25%);
 $white-color: #fff;
 $black-color: #000;
+
 // Typography colours
-$h2-color: #3D4351;
-$h3-color: #3D4351;
-$h5-color: #3D4351;
+$h2-color: $primary-blue;
+$h3-color: #333;
+$h5-color: #333;
+
 // Layout colours
-$section-light: #fff;
-$section-dark: #f8f9fd;
-$to-top-bg: #495061;
-$footer-primary: #3D4351;
-$footer-secondary: #373D4A;
+$section-light: $white;
+$section-dark: $light-blue;
+
+// Alternating variables
+$section-alt-1: $white;
+$section-alt-2: $light-blue;
+
+$to-top-bg: $primary-blue;
+$footer-primary: color.adjust($primary-blue, $lightness: -20%);
+$footer-secondary: color.adjust($primary-blue, $lightness: -25%);
+
 // Keylines
-$keyline-color: #E6E9EA;
-$footer-keyline-color: #4E566C;
+$keyline-color: rgba($primary-blue, 0.2);
+$footer-keyline-color: rgba($white, 0.2);
