@@ -16,7 +16,7 @@ https://hlabella.github.io/maite-e-henriques-wedding/
 # whats left to do
 * nossa historia
 * dica de salão e maquiagem
-* pagina sem link com manual pros padrinhos. - https://www.instagram.com/p/DHeSEXYvGiR/?img_index=1
-* manual dos convidados - https://www.instagram.com/p/DPUNMAxkfn_/
-* make it more responsive
 * make it more modular
+
+
+
