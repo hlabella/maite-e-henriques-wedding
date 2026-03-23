@@ -150,36 +150,16 @@ $(document).ready(function () {
         $('#btn-show-content').toggleClass('toggle-map-content');
     });
 
-    /********************** Add to Calendar **********************/
-    var myCalendar = createCalendar({
-        options: {
-            class: '',
-            // You can pass an ID. If you don't, one will be generated for you
-            id: ''
-        },
-        data: {
-            // Event title
-            title: "Casamento Henrique e Maitê",
-
-            // Event start date
-            start: new Date('Nov 1, 2026 17:00'),
-
-            // Event duration (IN MINUTES)
-            // duration: 120,
-
-            // You can also choose to set an end time
-            // If an end time is set, this will take precedence over duration
-            end: new Date('Nov 2, 2026 02:00'),
-
-            // Event Address
-            address: 'Garden Noor, ',
-
-            // Event Description
-            description: "Mal podemos esperar para te ver no nosso dia especial. Qualquer dúvida, entre em contato com +55 11 99637-3052 (Adeni Leite)"
-        }
+    /********************** Go to Gifts **********************/
+    $('#go-to-gifts-btn').click(function(e) {
+        e.preventDefault();
+        $('#rsvp-modal').modal('hide');
+        setTimeout(function() {
+            $('html, body').animate({
+                scrollTop: $('#gifts').offset().top - 90
+            }, 2000);
+        }, 400); // Wait for modal to close
     });
-
-    $('#add-to-cal').html(myCalendar);
 
 
     /********************** RSVP **********************/
@@ -309,11 +289,17 @@ $(document).ready(function () {
 
                 // Add a one-time event listener to play on first interaction
                 var playOnInteraction = function () {
-                    audio.play();
-                    document.removeEventListener('click', playOnInteraction);
-                    document.removeEventListener('touchstart', playOnInteraction);
-                    document.removeEventListener('keydown', playOnInteraction);
-                    document.removeEventListener('scroll', playOnInteraction);
+                    var interactionPromise = audio.play();
+                    if (interactionPromise !== undefined) {
+                        interactionPromise.then(_ => {
+                            document.removeEventListener('click', playOnInteraction);
+                            document.removeEventListener('touchstart', playOnInteraction);
+                            document.removeEventListener('keydown', playOnInteraction);
+                            document.removeEventListener('scroll', playOnInteraction);
+                        }).catch(error => {
+                            console.log("Audio play failed on interaction:", error);
+                        });
+                    }
                 };
 
                 document.addEventListener('click', playOnInteraction);

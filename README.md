@@ -13,10 +13,10 @@ https://script.google.com/macros/s/AKfycbxKuS2yVf2ndryQrVTxX5H6k1tpeGQCT-oPooXGe
 frontend do rsvp (github pages):
 https://hlabella.github.io/maite-e-henriques-wedding/
 
-# whats left to do
-* nossa historia
+# whats left to do - private project
 * dica de salão e maquiagem
-* make it more modular
+* dica de hotel
 
-
-
+# whats left to do - public project
+* make variable stuff come from config files
+* document how to change song, maybe get it from youtube link
