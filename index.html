@@ -77,14 +77,13 @@
         }
     </style>
     <script src="js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
         integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 </head>
 
-<body onload="checkPassword()" id="top">
+<body id="top">
     <section class="hero">
         <section class="navigation">
             <header>
@@ -243,12 +242,12 @@
                         <i class="fa fa-bed fa-3x" style="color: #c9965e; margin-bottom: 15px;"></i>
                         <h4>Hotéis</h4>
                         <ul style="list-style: none; padding: 0;">
-                            <li><a href="https://www.booking.com/Share-a19eQIv" target="_blank"
-                                    style="color: #555; text-decoration: underline;">Hilton</a></li>
-                            <li><a href="https://www.booking.com/Share-LmaP7xJ" target="_blank"
-                                    style="color: #555; text-decoration: underline;">Hyatt</a></li>
-                            <li><a href="https://www.booking.com/Share-dEnHfzF" target="_blank"
-                                    style="color: #555; text-decoration: underline;">Ibis</a></li>
+                            <li><a href="https://atlantica.letsbook.com.br/reserva/link-publico?r=039c813e0d644420bd9266af10795c41&p=HENRIQUEEMAITE" target="_blank"
+                                    style="color: #555; text-decoration: underline;">Hilton (30% off)</a></li>
+                            <li><a href="https://wa.me/5517996243725?text=Ol%C3%A1!%20Quero%20reservar%20um%20quarto%20para%20o%20casamento%20da%20Maite%20%26%20Henrique." target="_blank"
+                                    style="color: #555; text-decoration: underline;">Hotel Nacional by Intercity (taxa exclusiva)</a></li>
+                            <li><a href="https://www.saintpaulplazahotel.com.br" target="_blank"
+                                    style="color: #555; text-decoration: underline;">Hotel Saint Paul (Cupom de 15% - HENRIQUEMAITE)</a></li>
                         </ul>
                     </div>
                 </div>
@@ -258,7 +257,16 @@
                     <div class="service-box">
                         <i class="fa fa-female fa-3x" style="color: #c9965e; margin-bottom: 15px;"></i>
                         <h4>Maquiagem / Salão</h4>
-                        <p><em>(Espaço reservado para indicação de maquiadores/cabeleireiros)</em></p>
+                        <ul style="list-style: none; padding: 0;">
+                            <li><a href="https://www.instagram.com/salaouniquegarden/" target="_blank"
+                                    style="color: #555; text-decoration: underline;">Salão Unique Garden</a></li>
+                            <li><a href="https://www.instagram.com/miriandsouzamakeup/" target="_blank"
+                                    style="color: #555; text-decoration: underline;">Mirian de Souza Makeup</a></li>
+                            <li><a href="https://www.instagram.com/evandrolimacoiffeur/" target="_blank"
+                                    style="color: #555; text-decoration: underline;">Evandro Lima Coiffeur</a></li>
+                            <li><a href="https://www.instagram.com/alinnezaninibeauty/" target="_blank"
+                                    style="color: #555; text-decoration: underline;">Alinne Zanini Beauty</a></li>
+                        </ul>
                     </div>
                 </div>
                 <div class="col-md-6 text-center">
@@ -374,7 +382,7 @@
                         </div>
 
                         <!-- Dynamic Name Fields -->
-                        <div id="adult-names-container" style="margin-top: 15px;"></div>
+                        <div id="adult-names-container"></div>
                         <div id="kid-names-container"></div>
 
                         <div class="row" style="margin-top: 15px;">
@@ -513,36 +521,43 @@
             "place1time": "17:00",
             "place1name": "Garden Noor",
             "place1address": "Rodovia Padre Mariano Aparício de La Mata, 300, Estância Bela Vista, São José do Rio Preto 15077-456",
-            "presentes": 13,
+            "presentes": 30,
             "gifts": [
-                { "name": "Aparelho de Fondue", "price": 150, "image": "https://live.staticflickr.com/65535/52924520581_2d83cc3759_b.jpg" },
-                { "name": "Mini impressora de fotos", "price": 180, "image": "https://upload.wikimedia.org/wikipedia/commons/a/ad/Fujifilm_Instax_Mini_Link_on_the_table_at_WirForce_Shop_20221105.jpg" },
-                { "name": "Chaleira", "price": 250, "image": "https://upload.wikimedia.org/wikipedia/commons/4/44/Black_tea_pot_cropped.jpg" },
-                { "name": "Caixa de som", "price": 300, "image": "https://www.trustedreviews.com/wp-content/uploads/sites/54/2021/09/JBL-Flip-5-vertical-scaled.jpg" },
-                { "name": "Echo Dot", "price": 350, "image": "https://images.pexels.com/photos/14309805/pexels-photo-14309805.jpeg" },
-                { "name": "Cooktop", "price": 400, "image": "https://environmentamerica.org/wp-content/uploads/2022/02/PIRG_Gas-Stove-rawpixel-id-5925804-Public-Domain_WEB.jpg" },
-                { "name": "Jantar Estrela Michelin", "price": 500, "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQfmCJR1TMHCK6MYeIR8csbpwagbnlUomXggg&s" },
-                { "name": "Diária da Lua de Mel", "price": 1000, "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRX3B8pK9FnsoAR1eOnbnch5a6mhQeVWLIJQA&s" },
-                { "name": "Vaso Murano Gout 35 cm", "price": 2000, "image": "https://cdn-assets-legacy.casar.com/thumb/208x208x1/img/presentes/shopping-camicado/Vaso_Murano_Gout_35_cm.jpg" },
-                { "name": "Adega 33 Garrafas Compressor", "price": 4000, "image": "https://cdn-assets-legacy.casar.com/thumb/208x208x1/img/presentes/shopping-camicado/Adega_33_Garrafas_Compressor.jpg" },
+                { "name": "Aparelho de Fondue", "price": 213.90, "image": "https://live.staticflickr.com/65535/52924520581_2d83cc3759_b.jpg" },
+                { "name": "Mini impressora de fotos", "price": 237.90, "image": "https://upload.wikimedia.org/wikipedia/commons/a/ad/Fujifilm_Instax_Mini_Link_on_the_table_at_WirForce_Shop_20221105.jpg" },
+                { "name": "Chaleira", "price": 262.90, "image": "https://upload.wikimedia.org/wikipedia/commons/4/44/Black_tea_pot_cropped.jpg" },
+                { "name": "Caixa de Som Bluetooth", "price": 286.90, "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/JBL_Flip_4.jpg/960px-JBL_Flip_4.jpg" },
+                { "name": "Echo Dot", "price": 314.90, "image": "https://images.pexels.com/photos/14309805/pexels-photo-14309805.jpeg" },
+                { "name": "Liquidificador", "price": 343.90, "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Fresh_fruits_and_a_blender_are_arranged_on_a_kitchen_counter_for_smoothie_preparation.jpg/960px-Fresh_fruits_and_a_blender_are_arranged_on_a_kitchen_counter_for_smoothie_preparation.jpg" },
+                { "name": "Cooktop", "price": 372.90, "image": "https://environmentamerica.org/wp-content/uploads/2022/02/PIRG_Gas-Stove-rawpixel-id-5925804-Public-Domain_WEB.jpg" },
+                { "name": "Air Fryer", "price": 409.90, "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Air_Fryer_2020.jpg/960px-Air_Fryer_2020.jpg" },
+                { "name": "Jogo de Taças de Cristal", "price": 437.90, "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Wine_glass5275.jpg/960px-Wine_glass5275.jpg" },
+                { "name": "Jogo de Panelas Inox", "price": 468.90, "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Hahn_Stainless_Pan_Range.jpg/960px-Hahn_Stainless_Pan_Range.jpg" },
+                { "name": "Jantar Estrela Michelin", "price": 527.90, "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQfmCJR1TMHCK6MYeIR8csbpwagbnlUomXggg&s" },
+                { "name": "Aspirador Robô", "price": 568.90, "image": "https://upload.wikimedia.org/wikipedia/commons/2/21/Mopping_vacuum_cleaner_robotic.jpg" },
+                { "name": "Batedeira Planetária", "price": 613.90, "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Red_KitchenAid_Artisan.jpg/960px-Red_KitchenAid_Artisan.jpg" },
+                { "name": "Kit Churrasco", "price": 657.90, "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Meat-barbecue-grill_%2823699080033%29.jpg/960px-Meat-barbecue-grill_%2823699080033%29.jpg" },
+                { "name": "Massagem para o Casal", "price": 694.90, "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Spa_massage_parlor_in_Amantaka_luxury_Resort_%26_Hotel_in_Luang_Prabang_Laos.jpg/960px-Spa_massage_parlor_in_Amantaka_luxury_Resort_%26_Hotel_in_Luang_Prabang_Laos.jpg" },
+                { "name": "Cafeteira Expresso", "price": 738.90, "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Espresso_coffee_machine_in_a_cafe_closeup.jpg/960px-Espresso_coffee_machine_in_a_cafe_closeup.jpg" },
+                { "name": "Passeio de Barco a Vela", "price": 784.90, "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Sailboat-sea-sunset-beach.JPG/960px-Sailboat-sea-sunset-beach.JPG" },
+                { "name": "Degustação de Vinhos", "price": 826.90, "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Wine_tasting_at_Heitz_Cellar%2C_they_have_my_fav_Zinfandel_%F0%9F%8D%B7.jpg/960px-Wine_tasting_at_Heitz_Cellar%2C_they_have_my_fav_Zinfandel_%F0%9F%8D%B7.jpg" },
+                { "name": "Noite em Hotel Boutique", "price": 879.90, "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Reception_lounge_at_Amantaka_luxury_Resort_%26_Hotel_at_blue_hour_in_Luang_Prabang_Laos.jpg/960px-Reception_lounge_at_Amantaka_luxury_Resort_%26_Hotel_at_blue_hour_in_Luang_Prabang_Laos.jpg" },
+                { "name": "Robô de Cozinha", "price": 934.90, "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Food_Processor_2.jpg/960px-Food_Processor_2.jpg" },
+                { "name": "Diária da Lua de Mel", "price": 1087.90, "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRX3B8pK9FnsoAR1eOnbnch5a6mhQeVWLIJQA&s" },
+                { "name": "Passeio de Balão", "price": 1243.90, "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Hot_air_balloon_at_sunrise_over_Cappadocia%2C_Turkey.JPG/960px-Hot_air_balloon_at_sunrise_over_Cappadocia%2C_Turkey.JPG" },
+                { "name": "Smart TV", "price": 1478.90, "image": "https://upload.wikimedia.org/wikipedia/commons/3/33/EFTA00002142_-_Modern_living_room_with_a_large_flat-screen_TV_on_a_wooden_media_console_set_against_white_walls_and_tiled_flooring.jpg" },
+                { "name": "Lava-Louças", "price": 1682.90, "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/KitchenAid_home_dishwasher_-_Open.jpg/960px-KitchenAid_home_dishwasher_-_Open.jpg" },
+                { "name": "Passeio de Helicóptero", "price": 1893.90, "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Bend_Oregon_Helicopter_Tours.png/960px-Bend_Oregon_Helicopter_Tours.png" },
+                { "name": "Vaso Murano Gout 35 cm", "price": 2134.90, "image": "https://cdn-assets-legacy.casar.com/thumb/208x208x1/img/presentes/shopping-camicado/Vaso_Murano_Gout_35_cm.jpg" },
+                { "name": "Passagens Aéreas da Lua de Mel", "price": 2467.90, "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Airplane_wing_sky_and_clouds.jpg/960px-Airplane_wing_sky_and_clouds.jpg" },
+                { "name": "Mergulho na Lua de Mel", "price": 2846.90, "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/NOAA_divers_coral_reef_north_coast_Pagan_2022.png/960px-NOAA_divers_coral_reef_north_coast_Pagan_2022.png" },
+                { "name": "Suíte Premium na Lua de Mel", "price": 3238.90, "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Canopy_bed_of_Amantaka_Suite_in_Amantaka_luxury_Resort_%26_Hotel_in_Luang_Prabang_Laos_5x4.jpg/960px-Canopy_bed_of_Amantaka_Suite_in_Amantaka_luxury_Resort_%26_Hotel_in_Luang_Prabang_Laos_5x4.jpg" },
+                { "name": "Adega 33 Garrafas Compressor", "price": 3874.90, "image": "https://cdn-assets-legacy.casar.com/thumb/208x208x1/img/presentes/shopping-camicado/Adega_33_Garrafas_Compressor.jpg" },
             ],
-            "pix": "37873863867",
-            "beneficiariopix": "Henrique",
+            "pix": "34999323850",
+            "beneficiariopix": "Maite",
             "cidadepix": "São Paulo",
-            "hash": "92a70799e19d8734fecfb8e59aa930e9f386f7645059a1f2f04eb8483c9b5f1d",
         };
-
-        function checkPassword() {
-
-            // Hash the input password
-            var password = prompt("Insira a senha:");
-            var inputHash = CryptoJS.SHA256(password).toString();
-
-            // Compare the input hash with the stored hash
-            if (inputHash != data.hash) {
-                window.location = "https://www.google.com";  // Redirect to a different page
-            }
-        }
 
         // Função para gerar um txid aleatório de até 25 caracteres alfanuméricos
         function generateTxid() {
@@ -590,7 +605,7 @@
                     <div style="border: 1px solid #ddd; border-radius: 8px; padding: 35px; text-align: center; background-color: #fff; cursor: pointer;">
                         <img src="${gift.image}" alt="${gift.name}" style="width: 200px; height: 200px; object-fit: cover; border-radius: 8px;">
                         <h4 style="margin-top: 30px;">${gift.name}</h4>
-                        <p style="padding-bottom: 0px">R$${gift.price}</p>
+                        <p style="padding-bottom: 0px">R$ ${gift.price.toFixed(2).replace('.', ',')}</p>
                     </div>
                 `;
 

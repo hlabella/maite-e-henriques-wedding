@@ -195,14 +195,10 @@ $(document).ready(function () {
 
         if (count > 1) {
             for (var i = 1; i < count; i++) {
-                var labelText = "Nome do Acompanhante " + i;
                 var html = `
-                    <div class="row">
+                    <div class="row" style="margin-top: 15px;">
                         <div class="col-md-12">
-                            <div class="form-input-group">
-                                <i class="fa fa-user"></i>
-                                <input type="text" name="adult_name_${i}" class="" placeholder="${labelText}" required>
-                            </div>
+                            <input type="text" name="adult_name_${i}" class="form-control" placeholder="Nome do Acompanhante ${i}" required>
                         </div>
                     </div>
                 `;
@@ -219,12 +215,9 @@ $(document).ready(function () {
         if (count > 0) {
             for (var i = 1; i <= count; i++) {
                 var html = `
-                    <div class="row">
+                    <div class="row" style="margin-top: 15px;">
                         <div class="col-md-12">
-                            <div class="form-input-group">
-                                <i class="fa fa-child"></i>
-                                <input type="text" name="kid_name_${i}" class="" placeholder="Nome da Criança ${i}" required>
-                            </div>
+                            <input type="text" name="kid_name_${i}" class="form-control" placeholder="Nome da Criança ${i}" required>
                         </div>
                     </div>
                 `;
@@ -558,7 +551,7 @@ function generateQrCode(giftName, giftPrice, txid, giftername, prefix = '') {
     modalQrCode.src = qrCodeUrl;
 
     // Update modal text
-    document.getElementById(prefix + 'modalText').textContent = `Presente: ${giftName}. Valor: R$${giftPrice}. Use o QR Code acima para pagar o presente.`;
+    document.getElementById(prefix + 'modalText').textContent = `Presente: ${giftName}. Valor: R$ ${value.toFixed(2).replace('.', ',')}. Use o QR Code acima para pagar o presente.`;
 
     // Show QR Code section
     document.getElementById(prefix + 'qrCodeContainer').style.display = 'block';
