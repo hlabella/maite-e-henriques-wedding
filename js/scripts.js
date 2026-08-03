@@ -167,7 +167,8 @@ $(document).ready(function () {
     $('#rsvp-form').on('submit', function (e) {
         e.preventDefault();
 
-        var $submitBtn = $(this).find('.rsvp-btn');
+        var $form = $(this);
+        var $submitBtn = $form.find('.rsvp-btn');
 
         // Prevent double submissions (people clicking twice = duplicate entries)
         if ($submitBtn.prop('disabled')) {
@@ -178,9 +179,12 @@ $(document).ready(function () {
         // if the write succeeded but the response got lost, the retry
         // won't create a second row in the spreadsheet.
         var submissionId = Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 10);
-        var data = $(this).serialize() + '&submission_id=' + encodeURIComponent(submissionId);
+        // Serialize BEFORE disabling: disabled fields are excluded from serialize()
+        var data = $form.serialize() + '&submission_id=' + encodeURIComponent(submissionId);
         var originalBtnText = $submitBtn.html();
-        $submitBtn.prop('disabled', true).html('Enviando...');
+        var $fields = $form.find('input, select, button');
+        $fields.prop('disabled', true);
+        $submitBtn.html('Enviando...');
 
         $('#alert-wrapper').html(alert_markup('info', '<strong>Só um segundo!</strong> Estamos salvando seus dados.'));
 
@@ -198,7 +202,8 @@ $(document).ready(function () {
                     if (data.result === "error") {
                         $('#alert-wrapper').html(alert_markup('danger', data.message));
                         // Re-enable so the guest can correct and resubmit
-                        $submitBtn.prop('disabled', false).html(originalBtnText);
+                        $fields.prop('disabled', false);
+                        $submitBtn.html(originalBtnText);
                     } else {
                         $('#alert-wrapper').html('');
                         $('#rsvp-modal').modal('show');
@@ -216,7 +221,8 @@ $(document).ready(function () {
                     } else {
                         $('#alert-wrapper').html(alert_markup('danger', '<strong>Desculpe!</strong> Não conseguimos confirmar o envio. Sua confirmação pode ter sido salva mesmo assim — por favor, avise os noivos antes de tentar de novo.'));
                         // Re-enable so the guest can retry after a server error
-                        $submitBtn.prop('disabled', false).html(originalBtnText);
+                        $fields.prop('disabled', false);
+                        $submitBtn.html(originalBtnText);
                     }
                 });
         }

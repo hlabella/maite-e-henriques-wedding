@@ -54,6 +54,18 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
     <style>
+        /* Make the sending state visually obvious and swallow stray taps */
+        .rsvp-form button[disabled] {
+            opacity: 0.65;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .rsvp-form input[disabled],
+        .rsvp-form select[disabled] {
+            opacity: 0.65;
+        }
+
         .wedding-font {
             font-family: 'Pinyon Script', cursive;
             font-size: 81px;

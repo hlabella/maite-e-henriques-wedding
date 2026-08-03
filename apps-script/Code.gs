@@ -10,10 +10,25 @@
   would generate a new URL and js/scripts.js would have to be updated.
 */
 function doGet(e) {
-  return handleRequest(e);
+  // GET never writes: crawlers or anyone opening the URL in a browser
+  // used to create near-empty rows in the sheet.
+  return ContentService
+    .createTextOutput(JSON.stringify({ "result": "error", "message": "Use o formulário do site para confirmar presença." }))
+    .setMimeType(ContentService.MimeType.JSON);
 }
 function doPost(e) {
   return handleRequest(e);
+}
+
+// Neutralize spreadsheet formula injection: setValues() treats cell
+// values starting with =, +, - or @ as live formulas. A leading
+// apostrophe forces Sheets to store them as literal text (the
+// apostrophe itself is not displayed in the cell).
+function sanitizeCell(value) {
+  if (typeof value === 'string' && /^[=+\-@]/.test(value)) {
+    return "'" + value;
+  }
+  return value;
 }
 function handleRequest(e) {
   var lock = LockService.getScriptLock();
@@ -44,7 +59,6 @@ function handleRequest(e) {
     }
 
     var headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
-    var nextRow = sheet.getLastRow() + 1;
     var newRow = [];
     var rowData = {
       'Timestamp': new Date(),
@@ -60,12 +74,14 @@ function handleRequest(e) {
     // Fill row based on header order
     for (var i = 0; i < headers.length; i++) {
       var header = headers[i];
-      newRow.push(rowData[header] || ""); // Default to empty string if not found
+      newRow.push(sanitizeCell(rowData[header] || "")); // Default to empty string if not found
     }
-    sheet.getRange(nextRow, 1, 1, newRow.length).setValues([newRow]);
+    // Single call instead of getLastRow + getRange + setValues:
+    // fewer Sheets round-trips = faster response for the guest.
+    sheet.appendRow(newRow);
     SpreadsheetApp.flush(); // Commit the write before answering
     return ContentService
-      .createTextOutput(JSON.stringify({ "result": "success", "row": nextRow }))
+      .createTextOutput(JSON.stringify({ "result": "success" }))
       .setMimeType(ContentService.MimeType.JSON);
   } catch (err) {
     return ContentService
