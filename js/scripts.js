@@ -226,19 +226,6 @@ $(document).ready(function () {
         }
     });
 
-    /***************** Leaflet Map ******************/
-    if ($('#map').length) {
-        var map = L.map('map').setView([-20.86940, -49.32297], 15);
-
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map);
-
-        L.marker([-20.86940, -49.32297]).addTo(map)
-            .bindPopup('Cerimônia e Recepção')
-            .openPopup();
-    }
-
     /***************** Countdown Timer ******************/
     if (typeof data !== 'undefined' && data.weddingdate_iso) {
         const countDownDate = new Date(data.weddingdate_iso).getTime();
@@ -556,5 +543,27 @@ function generateQrCode(giftName, giftPrice, txid, giftername, prefix = '') {
     // Show QR Code section
     document.getElementById(prefix + 'qrCodeContainer').style.display = 'block';
 
-    // if paid, save the gift price, and giftername in DB
+    // "Copia e cola" fallback: fill the text field and wire the copy button.
+    // Needed for guests browsing on the same phone (can't scan their own screen)
+    // and as a backup if the QR image service fails to load.
+    const pixCodeField = document.getElementById(prefix + 'modalPixCode');
+    const copyBtn = document.getElementById(prefix + 'copyPixCodeBtn');
+    pixCodeField.value = qrCodeData;
+    copyBtn.textContent = 'Copiar código Pix';
+    copyBtn.onclick = function () {
+        pixCodeField.focus();
+        pixCodeField.select();
+        pixCodeField.setSelectionRange(0, 99999); // iOS/Android need an explicit range
+        const confirmCopied = function () {
+            copyBtn.textContent = 'Copiado!';
+            setTimeout(function () { copyBtn.textContent = 'Copiar código Pix'; }, 2000);
+        };
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(qrCodeData).then(confirmCopied).catch(function () {
+                try { document.execCommand('copy'); confirmCopied(); } catch (e) { }
+            });
+        } else {
+            try { document.execCommand('copy'); confirmCopied(); } catch (e) { }
+        }
+    };
 }

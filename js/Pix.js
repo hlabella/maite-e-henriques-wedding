@@ -110,8 +110,8 @@ function Pix (pixKey, /*description,*/ merchantName, merchantCity, txid, amount)
       }
     }
 
-    //RETORNA CÓDIGO CRC16 DE 4 CARACTERES
-    return ID_CRC16 + "04" + dechex(resultado).toUpperCase();
+    //RETORNA CÓDIGO CRC16 DE 4 CARACTERES (com zero à esquerda quando necessário)
+    return ID_CRC16 + "04" + dechex(resultado).toUpperCase().padStart(4, "0");
   }
 };
 
