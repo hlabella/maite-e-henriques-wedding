@@ -421,6 +421,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <h3 class="header" style="text-align: center;">Presentes</h3>
+                    <p id="pix-info" style="text-align: center;"></p>
                 </div>
             </div>
             <div class="row" id="gifts-list">
@@ -613,6 +614,8 @@
                     giftsSection.remove();  // Remove the section if no gifts are present
                 }
             } else {
+                document.getElementById('pix-info').textContent = `Se preferir PIX: ${data.pix}`;
+
                 const giftsList = document.getElementById('gifts-list');
 
                 data.gifts.forEach(function (gift, index) {
