@@ -166,7 +166,17 @@ $(document).ready(function () {
     /********************** RSVP **********************/
     $('#rsvp-form').on('submit', function (e) {
         e.preventDefault();
+
+        var $submitBtn = $(this).find('.rsvp-btn');
+
+        // Prevent double submissions (people clicking twice = duplicate entries)
+        if ($submitBtn.prop('disabled')) {
+            return;
+        }
+
         var data = $(this).serialize();
+        var originalBtnText = $submitBtn.html();
+        $submitBtn.prop('disabled', true).html('Enviando...');
 
         $('#alert-wrapper').html(alert_markup('info', '<strong>Só um segundo!</strong> Estamos salvando seus dados.'));
 
@@ -175,15 +185,20 @@ $(document).ready(function () {
                 console.log(data);
                 if (data.result === "error") {
                     $('#alert-wrapper').html(alert_markup('danger', data.message));
+                    // Re-enable so the guest can correct and resubmit
+                    $submitBtn.prop('disabled', false).html(originalBtnText);
                 } else {
                     $('#alert-wrapper').html('');
                     $('#rsvp-modal').modal('show');
                     $('#rsvp-form').hide();
+                    // Keep the button disabled: confirmation succeeded
                 }
             })
             .fail(function (data) {
                 console.log(data);
                 $('#alert-wrapper').html(alert_markup('danger', '<strong>Desculpe!</strong> Estamos com algum problema no servidor. Avise os noivos.'));
+                // Re-enable so the guest can retry after a server error
+                $submitBtn.prop('disabled', false).html(originalBtnText);
             });
     });
 
