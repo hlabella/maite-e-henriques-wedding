@@ -174,32 +174,54 @@ $(document).ready(function () {
             return;
         }
 
-        var data = $(this).serialize();
+        // Unique id kept across retries so the backend can dedupe:
+        // if the write succeeded but the response got lost, the retry
+        // won't create a second row in the spreadsheet.
+        var submissionId = Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 10);
+        var data = $(this).serialize() + '&submission_id=' + encodeURIComponent(submissionId);
         var originalBtnText = $submitBtn.html();
         $submitBtn.prop('disabled', true).html('Enviando...');
 
         $('#alert-wrapper').html(alert_markup('info', '<strong>Só um segundo!</strong> Estamos salvando seus dados.'));
 
-        $.post('https://script.google.com/macros/s/AKfycbxKuS2yVf2ndryQrVTxX5H6k1tpeGQCT-oPooXGewOTCLS_7W35ybTV3-7cguvcAcYyZw/exec', data)
-            .done(function (data) {
-                console.log(data);
-                if (data.result === "error") {
-                    $('#alert-wrapper').html(alert_markup('danger', data.message));
-                    // Re-enable so the guest can correct and resubmit
-                    $submitBtn.prop('disabled', false).html(originalBtnText);
-                } else {
-                    $('#alert-wrapper').html('');
-                    $('#rsvp-modal').modal('show');
-                    $('#rsvp-form').hide();
-                    // Keep the button disabled: confirmation succeeded
-                }
+        var MAX_ATTEMPTS = 3;
+
+        function sendRsvp(attempt) {
+            $.ajax({
+                url: 'https://script.google.com/macros/s/AKfycbxKuS2yVf2ndryQrVTxX5H6k1tpeGQCT-oPooXGewOTCLS_7W35ybTV3-7cguvcAcYyZw/exec',
+                method: 'POST',
+                data: data,
+                timeout: 30000
             })
-            .fail(function (data) {
-                console.log(data);
-                $('#alert-wrapper').html(alert_markup('danger', '<strong>Desculpe!</strong> Estamos com algum problema no servidor. Avise os noivos.'));
-                // Re-enable so the guest can retry after a server error
-                $submitBtn.prop('disabled', false).html(originalBtnText);
-            });
+                .done(function (data) {
+                    console.log(data);
+                    if (data.result === "error") {
+                        $('#alert-wrapper').html(alert_markup('danger', data.message));
+                        // Re-enable so the guest can correct and resubmit
+                        $submitBtn.prop('disabled', false).html(originalBtnText);
+                    } else {
+                        $('#alert-wrapper').html('');
+                        $('#rsvp-modal').modal('show');
+                        $('#rsvp-form').hide();
+                        // Keep the button disabled: confirmation succeeded
+                    }
+                })
+                .fail(function (xhr) {
+                    console.log('RSVP attempt ' + attempt + ' failed', xhr);
+                    if (attempt < MAX_ATTEMPTS) {
+                        $('#alert-wrapper').html(alert_markup('info', '<strong>Quase lá!</strong> A conexão está lenta, tentando novamente...'));
+                        setTimeout(function () {
+                            sendRsvp(attempt + 1);
+                        }, 2000);
+                    } else {
+                        $('#alert-wrapper').html(alert_markup('danger', '<strong>Desculpe!</strong> Não conseguimos confirmar o envio. Sua confirmação pode ter sido salva mesmo assim — por favor, avise os noivos antes de tentar de novo.'));
+                        // Re-enable so the guest can retry after a server error
+                        $submitBtn.prop('disabled', false).html(originalBtnText);
+                    }
+                });
+        }
+
+        sendRsvp(1);
     });
 
     // Dynamic Fields Logic
