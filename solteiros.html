@@ -1,0 +1,251 @@
+<!doctype html>
+<html class="no-js" lang="pt-BR">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Jornal de Solteiros | Casamento</title>
+    <meta name="description" content="Apresente-se no Jornal de Solteiros do casamento!">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#ffffff">
+    <!-- Page is shared by link only: keep it out of search engines -->
+    <meta name="robots" content="noindex, nofollow">
+    <meta property="og:title" content="Jornal de Solteiros | Casamento">
+    <meta property="og:description" content="Apresente-se no Jornal de Solteiros do casamento!">
+    <meta property="og:type" content="website">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="manifest" href="manifest.json">
+
+    <link rel="stylesheet" href="css/normalize.min.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/styles.min.css">
+    <link rel="stylesheet" href="css/queries.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+    <style>
+        section.rsvp {
+            min-height: 100vh;
+            padding-top: 60px;
+        }
+
+        .jornal-title {
+            font-family: 'Great Vibes', cursive;
+            font-size: 64px;
+            line-height: 1.1;
+            margin-bottom: 10px;
+        }
+
+        .rsvp-form textarea.form-control {
+            height: auto;
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .char-counter {
+            text-align: right;
+            font-size: 13px;
+            color: #888;
+            margin-top: 5px;
+        }
+
+        .char-counter.limit {
+            color: #c0392b;
+        }
+
+        /* Honeypot field: invisible to people, bots tend to fill it */
+        .hp-field {
+            position: absolute;
+            left: -9999px;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+        }
+
+        .rsvp-form button[disabled] {
+            opacity: 0.65;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .rsvp-form input[disabled],
+        .rsvp-form textarea[disabled] {
+            opacity: 0.65;
+        }
+
+        #jornal-success {
+            display: none;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+
+<body id="top">
+    <section class="rsvp text-center" id="jornal">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3">
+                    <h1 class="jornal-title">Jornal de Solteiros</h1>
+                    <p>Está solteiro(a) e vai ao casamento? Apresente-se! Preencha os campos abaixo e apareça na
+                        próxima edição do nosso jornal.</p>
+
+                    <form id="jornal-form" class="rsvp-form" action="" method="POST" novalidate>
+                        <div class="row" style="margin-top: 25px;">
+                            <div class="col-md-12">
+                                <input type="text" name="name" class="form-control" placeholder="Nome"
+                                    maxlength="100" required>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top: 15px;">
+                            <div class="col-md-4 col-sm-4">
+                                <input type="number" name="age" class="form-control" placeholder="Idade" min="18"
+                                    max="120" inputmode="numeric" required>
+                            </div>
+                            <div class="col-md-8 col-sm-8">
+                                <input type="text" name="city" class="form-control" placeholder="Onde mora"
+                                    maxlength="100" required>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top: 15px;">
+                            <div class="col-md-12">
+                                <textarea name="description" id="jornal-description" class="form-control"
+                                    maxlength="500" rows="6"
+                                    placeholder="Fale um pouco sobre você (máx. 500 caracteres)" required></textarea>
+                                <div class="char-counter" id="char-counter">0 / 500</div>
+                            </div>
+                        </div>
+
+                        <div class="hp-field" aria-hidden="true">
+                            <label>Não preencha este campo <input type="text" name="website" tabindex="-1"
+                                    autocomplete="off"></label>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12" id="alert-wrapper"></div>
+                        </div>
+                        <button type="submit" class="btn-fill rsvp-btn" style="margin-top: 15px;">
+                            Enviar
+                        </button>
+                    </form>
+
+                    <div id="jornal-success">
+                        <h3>Obrigado!</h3>
+                        <p>Sua apresentação foi enviada. Fique de olho na próxima edição do jornal!</p>
+                        <a href="index.html" class="btn btn-fill" style="margin-top: 20px;">Ir para o site do
+                            casamento</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="js/vendor/jquery-1.11.2.min.js"></script>
+    <script>
+        // URL do Web App do Apps Script da planilha do Jornal de Solteiros
+        // (apps-script/Solteiros.gs). Cole aqui a URL /exec depois do deploy.
+        var JORNAL_SCRIPT_URL = 'COLE_AQUI_A_URL_DO_APPS_SCRIPT';
+
+        var MAX_DESCRIPTION = 500;
+
+        function alert_markup(alert_type, msg) {
+            return '<div class="alert alert-' + alert_type + '" role="alert">' + msg + '</div>';
+        }
+
+        $(function () {
+            var $form = $('#jornal-form');
+            var $description = $('#jornal-description');
+            var $counter = $('#char-counter');
+
+            $description.on('input', function () {
+                var length = $description.val().length;
+                $counter.text(length + ' / ' + MAX_DESCRIPTION);
+                $counter.toggleClass('limit', length >= MAX_DESCRIPTION);
+            });
+
+            $form.on('submit', function (e) {
+                e.preventDefault();
+
+                var $submitBtn = $form.find('.rsvp-btn');
+                if ($submitBtn.prop('disabled')) {
+                    return;
+                }
+
+                var name = $.trim($form.find('[name=name]').val());
+                var age = parseInt($form.find('[name=age]').val(), 10);
+                var city = $.trim($form.find('[name=city]').val());
+                var description = $.trim($description.val());
+
+                if (!name || !city || !description || isNaN(age)) {
+                    $('#alert-wrapper').html(alert_markup('danger', 'Preencha todos os campos, por favor.'));
+                    return;
+                }
+                if (age < 18 || age > 120) {
+                    $('#alert-wrapper').html(alert_markup('danger', 'Informe uma idade válida (18 anos ou mais).'));
+                    return;
+                }
+                if (description.length > MAX_DESCRIPTION) {
+                    $('#alert-wrapper').html(alert_markup('danger', 'A descrição pode ter no máximo 500 caracteres.'));
+                    return;
+                }
+
+                // Same idempotency scheme as the RSVP: the id survives retries so
+                // the backend can drop duplicates when only the response was lost.
+                var submissionId = Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 10);
+                var data = {
+                    name: name,
+                    age: age,
+                    city: city,
+                    description: description,
+                    website: $form.find('[name=website]').val(),
+                    submission_id: submissionId
+                };
+
+                var $fields = $form.find('input, textarea, button');
+                var originalBtnText = $submitBtn.html();
+                $fields.prop('disabled', true);
+                $submitBtn.html('Enviando...');
+                $('#alert-wrapper').html(alert_markup('info', '<strong>Só um segundo!</strong> Estamos salvando seus dados.'));
+
+                var MAX_ATTEMPTS = 3;
+
+                function sendForm(attempt) {
+                    $.ajax({
+                        url: JORNAL_SCRIPT_URL,
+                        method: 'POST',
+                        data: data,
+                        timeout: 30000
+                    })
+                        .done(function (response) {
+                            if (response.result === 'error') {
+                                $('#alert-wrapper').html(alert_markup('danger', response.message));
+                                $fields.prop('disabled', false);
+                                $submitBtn.html(originalBtnText);
+                            } else {
+                                $('#alert-wrapper').html('');
+                                $form.hide();
+                                $('#jornal-success').show();
+                            }
+                        })
+                        .fail(function (xhr) {
+                            console.log('Jornal attempt ' + attempt + ' failed', xhr);
+                            if (attempt < MAX_ATTEMPTS) {
+                                $('#alert-wrapper').html(alert_markup('info', '<strong>Quase lá!</strong> A conexão está lenta, tentando novamente...'));
+                                setTimeout(function () {
+                                    sendForm(attempt + 1);
+                                }, 2000);
+                            } else {
+                                $('#alert-wrapper').html(alert_markup('danger', '<strong>Desculpe!</strong> Não conseguimos confirmar o envio. Ele pode ter sido salvo mesmo assim — avise os noivos antes de tentar de novo.'));
+                                $fields.prop('disabled', false);
+                                $submitBtn.html(originalBtnText);
+                            }
+                        });
+                }
+
+                sendForm(1);
+            });
+        });
+    </script>
+</body>
+
+</html>
