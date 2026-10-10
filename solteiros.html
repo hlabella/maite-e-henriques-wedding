@@ -74,6 +74,42 @@
             opacity: 0.65;
         }
 
+        .photo-field {
+            margin-top: 15px;
+            text-align: left;
+        }
+
+        .photo-field label.photo-label {
+            display: block;
+            color: #666;
+            font-weight: 400;
+            font-size: 15px;
+            margin-bottom: 8px;
+        }
+
+        .photo-field input[type=file] {
+            width: 100%;
+            padding: 12px;
+            background: #fff;
+            border: 1px solid #e5e5e5;
+            border-radius: 8px;
+        }
+
+        .photo-hint {
+            font-size: 13px;
+            color: #888;
+            margin-top: 5px;
+        }
+
+        #photo-preview {
+            display: none;
+            max-width: 160px;
+            max-height: 160px;
+            margin-top: 10px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
         #jornal-success {
             display: none;
             margin-top: 40px;
@@ -115,6 +151,15 @@
                                 <div class="char-counter" id="char-counter">0 / 500</div>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-md-12 photo-field">
+                                <label class="photo-label" for="jornal-photo">Sua foto (opcional)</label>
+                                <input type="file" name="photo" id="jornal-photo"
+                                    accept=".jpg,.jpeg,.png,.heic,.heif,image/jpeg,image/png,image/heic,image/heif">
+                                <div class="photo-hint">JPG, PNG ou HEIC (iPhone), até 5 MB.</div>
+                                <img id="photo-preview" alt="Prévia da foto">
+                            </div>
+                        </div>
 
                         <div class="hp-field" aria-hidden="true">
                             <label>Não preencha este campo <input type="text" name="website" tabindex="-1"
@@ -145,17 +190,78 @@
         // URL do Web App do Apps Script da planilha do Jornal de Solteiros
         // (apps-script/Solteiros.gs). Cole aqui a URL /exec depois do deploy.
         var JORNAL_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwymOGO3WY9VVrlhMHE52GwFitjC2E_3SXiZPvWRVHMHQSZfBgA_WsDMHQjDc_z8iRj/exec';
-
+                                 
         var MAX_DESCRIPTION = 500;
+        // Keep in sync with MAX_PHOTO_BYTES in apps-script/Solteiros.gs
+        var MAX_PHOTO_BYTES = 5 * 1024 * 1024;
+        // Checked by extension: Windows/Android often report HEIC with an empty MIME type.
+        var ALLOWED_PHOTO_EXTENSIONS = ['jpg', 'jpeg', 'png', 'heic', 'heif'];
 
         function alert_markup(alert_type, msg) {
             return '<div class="alert alert-' + alert_type + '" role="alert">' + msg + '</div>';
+        }
+
+        // Returns an error message, or null if the file is acceptable
+        function validatePhoto(file) {
+            var extension = file.name.split('.').pop().toLowerCase();
+            if (ALLOWED_PHOTO_EXTENSIONS.indexOf(extension) === -1) {
+                return 'A foto precisa ser JPG, PNG ou HEIC (iPhone).';
+            }
+            if (file.size > MAX_PHOTO_BYTES) {
+                return 'A foto pode ter no máximo 5 MB. Esta tem ' + (file.size / 1024 / 1024).toFixed(1) + ' MB.';
+            }
+            return null;
+        }
+
+        // Resolves with the file content as base64 (without the data: prefix)
+        function readFileAsBase64(file) {
+            var deferred = $.Deferred();
+            var reader = new FileReader();
+            reader.onload = function () {
+                deferred.resolve(reader.result.split(',')[1]);
+            };
+            reader.onerror = function () {
+                deferred.reject();
+            };
+            reader.readAsDataURL(file);
+            return deferred.promise();
         }
 
         $(function () {
             var $form = $('#jornal-form');
             var $description = $('#jornal-description');
             var $counter = $('#char-counter');
+            var $photo = $('#jornal-photo');
+            var $preview = $('#photo-preview');
+            var previewUrl = null;
+
+            $photo.on('change', function () {
+                var file = this.files[0];
+                if (previewUrl) {
+                    URL.revokeObjectURL(previewUrl);
+                    previewUrl = null;
+                }
+                $preview.hide();
+                $('#alert-wrapper').html('');
+                if (!file) {
+                    return;
+                }
+                var error = validatePhoto(file);
+                if (error) {
+                    $('#alert-wrapper').html(alert_markup('danger', error));
+                    $photo.val('');
+                    return;
+                }
+                // HEIC only previews in Safari; elsewhere the preview just stays hidden
+                previewUrl = URL.createObjectURL(file);
+                $preview.attr('src', previewUrl);
+            });
+
+            $preview.on('load', function () {
+                $preview.show();
+            }).on('error', function () {
+                $preview.hide();
+            });
 
             $description.on('input', function () {
                 var length = $description.val().length;
@@ -188,6 +294,14 @@
                     $('#alert-wrapper').html(alert_markup('danger', 'A descrição pode ter no máximo 500 caracteres.'));
                     return;
                 }
+                var photoFile = $photo[0].files[0];
+                if (photoFile) {
+                    var photoError = validatePhoto(photoFile);
+                    if (photoError) {
+                        $('#alert-wrapper').html(alert_markup('danger', photoError));
+                        return;
+                    }
+                }
 
                 // Same idempotency scheme as the RSVP: the id survives retries so
                 // the backend can drop duplicates when only the response was lost.
@@ -205,22 +319,27 @@
                 var originalBtnText = $submitBtn.html();
                 $fields.prop('disabled', true);
                 $submitBtn.html('Enviando...');
-                $('#alert-wrapper').html(alert_markup('info', '<strong>Só um segundo!</strong> Estamos salvando seus dados.'));
+                $('#alert-wrapper').html(alert_markup('info', '<strong>Só um segundo!</strong> Estamos salvando seus dados' + (photoFile ? ' e enviando sua foto' : '') + '.'));
 
                 var MAX_ATTEMPTS = 3;
+
+                function enableForm() {
+                    $fields.prop('disabled', false);
+                    $submitBtn.html(originalBtnText);
+                }
 
                 function sendForm(attempt) {
                     $.ajax({
                         url: JORNAL_SCRIPT_URL,
                         method: 'POST',
                         data: data,
-                        timeout: 30000
+                        // Photo uploads can take a while on mobile connections
+                        timeout: photoFile ? 90000 : 30000
                     })
                         .done(function (response) {
                             if (response.result === 'error') {
                                 $('#alert-wrapper').html(alert_markup('danger', response.message));
-                                $fields.prop('disabled', false);
-                                $submitBtn.html(originalBtnText);
+                                enableForm();
                             } else {
                                 $('#alert-wrapper').html('');
                                 $form.hide();
@@ -236,13 +355,25 @@
                                 }, 2000);
                             } else {
                                 $('#alert-wrapper').html(alert_markup('danger', '<strong>Desculpe!</strong> Não conseguimos confirmar o envio. Ele pode ter sido salvo mesmo assim — avise os noivos antes de tentar de novo.'));
-                                $fields.prop('disabled', false);
-                                $submitBtn.html(originalBtnText);
+                                enableForm();
                             }
                         });
                 }
 
-                sendForm(1);
+                if (!photoFile) {
+                    sendForm(1);
+                    return;
+                }
+                readFileAsBase64(photoFile)
+                    .done(function (base64) {
+                        data.photo = base64;
+                        data.photo_name = photoFile.name;
+                        sendForm(1);
+                    })
+                    .fail(function () {
+                        $('#alert-wrapper').html(alert_markup('danger', 'Não conseguimos ler a foto. Tente escolher outra.'));
+                        enableForm();
+                    });
             });
         });
     </script>

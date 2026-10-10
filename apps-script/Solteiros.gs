@@ -13,10 +13,66 @@
   to be updated.
 
   Expected header row (row 1 of the first sheet), in any order:
-  Timestamp | Nome | Idade | Cidade | Descricao | SubmissionId
+  Timestamp | Nome | Idade | Cidade | Descricao | Foto | SubmissionId
+
+  Photos are saved to a Google Drive folder (created automatically on first
+  use, see getPhotoFolder) and the "Foto" column gets the file link. Files stay
+  private to the spreadsheet owner. After adding the Drive code, run setup()
+  once from the editor to grant Drive permission before redeploying.
 */
 var MAX_DESCRIPTION = 500;
 var MAX_SHORT_FIELD = 100;
+// Keep in sync with MAX_PHOTO_BYTES in solteiros.html
+var MAX_PHOTO_BYTES = 5 * 1024 * 1024;
+var PHOTO_FOLDER_NAME = 'Jornal de Solteiros - Fotos';
+
+// Run once from the Apps Script editor: triggers the Drive authorization
+// prompt and creates the photo folder.
+function setup() {
+  var folder = getPhotoFolder();
+  Logger.log('Pasta de fotos: ' + folder.getUrl());
+}
+
+// The folder id is remembered in script properties, so renaming or moving
+// the folder in Drive doesn't break uploads.
+function getPhotoFolder() {
+  var props = PropertiesService.getScriptProperties();
+  var folderId = props.getProperty('PHOTO_FOLDER_ID');
+  if (folderId) {
+    try {
+      return DriveApp.getFolderById(folderId);
+    } catch (err) {
+      // Folder was deleted: fall through and create a new one
+    }
+  }
+  var folder = DriveApp.createFolder(PHOTO_FOLDER_NAME);
+  props.setProperty('PHOTO_FOLDER_ID', folder.getId());
+  return folder;
+}
+
+// Detects the real image type from the file's magic bytes instead of
+// trusting the name or MIME type sent by the browser.
+// Returns { mime, extension } or null if it's not JPEG, PNG or HEIC/HEIF.
+function detectImageType(bytes) {
+  function b(i) { return bytes[i] & 0xFF; } // Apps Script bytes are signed
+  if (bytes.length < 12) {
+    return null;
+  }
+  if (b(0) === 0xFF && b(1) === 0xD8 && b(2) === 0xFF) {
+    return { mime: 'image/jpeg', extension: 'jpg' };
+  }
+  if (b(0) === 0x89 && b(1) === 0x50 && b(2) === 0x4E && b(3) === 0x47) {
+    return { mime: 'image/png', extension: 'png' };
+  }
+  // HEIC/HEIF (iPhone): ISO media file with "ftyp" box at offset 4
+  var boxType = String.fromCharCode(b(4), b(5), b(6), b(7));
+  var brand = String.fromCharCode(b(8), b(9), b(10), b(11));
+  if (boxType === 'ftyp' && /^(heic|heix|hevc|hevx|heim|heis|mif1|msf1)$/.test(brand)) {
+    var isHeic = brand.indexOf('he') === 0;
+    return isHeic ? { mime: 'image/heic', extension: 'heic' } : { mime: 'image/heif', extension: 'heif' };
+  }
+  return null;
+}
 
 function doGet(e) {
   // GET never writes: crawlers or anyone opening the URL in a browser
@@ -70,6 +126,23 @@ function handleRequest(e) {
     return jsonResponse({ "result": "error", "message": "A descrição pode ter no máximo 500 caracteres." });
   }
 
+  var photoBytes = null;
+  var photoType = null;
+  if (params.photo) {
+    try {
+      photoBytes = Utilities.base64Decode(params.photo);
+    } catch (err) {
+      return jsonResponse({ "result": "error", "message": "Não conseguimos ler a foto. Tente escolher outra." });
+    }
+    if (photoBytes.length > MAX_PHOTO_BYTES) {
+      return jsonResponse({ "result": "error", "message": "A foto pode ter no máximo 5 MB." });
+    }
+    photoType = detectImageType(photoBytes);
+    if (!photoType) {
+      return jsonResponse({ "result": "error", "message": "A foto precisa ser JPG, PNG ou HEIC (iPhone)." });
+    }
+  }
+
   var lock = LockService.getScriptLock();
   if (!lock.tryLock(20000)) {
     return jsonResponse({ "result": "error", "message": "Muita gente enviando ao mesmo tempo. Tente novamente em alguns segundos." });
@@ -87,6 +160,15 @@ function handleRequest(e) {
       }
     }
 
+    // Saved only after the duplicate check, so retries don't create extra files
+    var photoUrl = '';
+    if (photoBytes) {
+      var fileName = Utilities.formatDate(new Date(), 'America/Sao_Paulo', 'yyyy-MM-dd HH-mm') +
+        ' - ' + name.replace(/[\\\/:*?"<>|]/g, '') + '.' + photoType.extension;
+      var file = getPhotoFolder().createFile(Utilities.newBlob(photoBytes, photoType.mime, fileName));
+      photoUrl = file.getUrl();
+    }
+
     var headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
     var rowData = {
       'Timestamp': new Date(),
@@ -94,6 +176,7 @@ function handleRequest(e) {
       'Idade': age,
       'Cidade': city,
       'Descricao': description,
+      'Foto': photoUrl,
       'SubmissionId': params.submission_id
     };
     var newRow = [];
